@@ -319,7 +319,7 @@
     flex-wrap: wrap;
     gap: 9px;
   }
-  .chip-wrap.list { flex-direction: column; gap: 10px; }
+  .chip-wrap.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .chip-wrap.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
 
   .chip {
@@ -343,14 +343,14 @@
     border-color: var(--accent);
     font-weight: 700;
   }
-  .chip[aria-pressed="true"]:not(.region-card):not(.act-card)::before { content: "♥ "; }
+  .chip[aria-pressed="true"]:not(.route-card):not(.act-card)::before { content: "♥ "; }
 
   .chip-time { flex: 1 1 30%; }
 
-  .region-card, .act-card {
+  .route-card, .act-card {
     position: relative;
   }
-  .region-card::after, .act-card::after {
+  .route-card::after, .act-card::after {
     content: "♥";
     position: absolute;
     top: 6px;
@@ -361,21 +361,23 @@
     transform: scale(.5);
     transition: opacity .15s, transform .15s;
   }
-  .region-card[aria-pressed="true"]::after, .act-card[aria-pressed="true"]::after {
+  .route-card[aria-pressed="true"]::after, .act-card[aria-pressed="true"]::after {
     opacity: 1;
     transform: scale(1);
   }
 
-  .region-card {
+  .route-card {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    padding: 12px 13px;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    padding: 22px 12px;
   }
-  .region-card .r-name { font-size: 14.5px; font-weight: 700; }
-  .region-card .r-vibe { font-size: 11.5px; color: var(--muted); font-weight: 400; }
-  .region-card[aria-pressed="true"] .r-vibe { color: var(--accent-strong); }
+  .route-emoji { font-size: 26px; }
+  .route-card .r-name { font-size: 15px; font-weight: 700; }
+  .route-card .r-vibe { font-size: 11.5px; color: var(--muted); font-weight: 400; line-height: 1.4; }
+  .route-card[aria-pressed="true"] .r-vibe { color: var(--accent-strong); }
 
   .act-card {
     padding: 12px 6px;
@@ -513,12 +515,12 @@
       </div>
     </section>
 
-    <!-- Step 2: Shanghai regions -->
+    <!-- Step 2: mystery route -->
     <section class="step" data-step="2">
-      <p class="eyebrow">第二步 · 上海</p>
-      <h2 class="title">想在哪一片见面？</h2>
-      <p class="subtitle">选你顺路或喜欢的区域，可以多选</p>
-      <div class="chip-wrap list" id="regionChips" role="group" aria-label="上海区域"></div>
+      <p class="eyebrow">第二步 · 神秘惊喜</p>
+      <h2 class="title">选一条约会路径</h2>
+      <p class="subtitle">具体去哪先保密，选完当天见分晓</p>
+      <div class="chip-wrap pair" id="routeChips" role="group" aria-label="约会路径"></div>
       <div class="btn-row">
         <button class="btn btn-primary" id="next3" type="button" disabled>继续 →</button>
       </div>
@@ -577,10 +579,9 @@
   }
 
   var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00", "你定就好"];
-  var REGIONS = [
-    { name: "静安", vibe: "商圈热闹好逛" },
-    { name: "徐汇", vibe: "老牌文艺好逛" },
-    { name: "长宁", vibe: "愚园路 慢生活" }
+  var ROUTES = [
+    { e: "🎲", name: "约会路径 1", vibe: "神秘惊喜，交给我安排" },
+    { e: "🔮", name: "约会路径 2", vibe: "另一种玩法，一样用心" }
   ];
   var ACTS = [
     { e: "🍣", n: "日料" },
@@ -604,7 +605,7 @@
     step: 0,
     date: "",
     time: "",
-    regions: new Set(),
+    route: "",
     acts: new Set()
   };
 
@@ -613,7 +614,7 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         date: state.date, time: state.time,
-        regions: [...state.regions], acts: [...state.acts]
+        route: state.route, acts: [...state.acts]
       }));
     } catch (e) {}
   }
@@ -624,7 +625,7 @@
       var d = JSON.parse(raw);
       state.date = d.date || "";
       state.time = d.time || "";
-      state.regions = new Set(d.regions || []);
+      state.route = d.route || "";
       state.acts = new Set(d.acts || []);
     } catch (e) {}
   }
@@ -703,23 +704,24 @@
   dateInput.addEventListener("change", checkStep1);
   next1.addEventListener("click", function () { goTo(2); });
 
-  // Step 2
-  var regionChipsEl = document.getElementById("regionChips");
+  // Step 2 — single-select mystery route
+  var routeChipsEl = document.getElementById("routeChips");
   var next3 = document.getElementById("next3");
-  REGIONS.forEach(function (r) {
+  ROUTES.forEach(function (r) {
     var c = document.createElement("button");
     c.type = "button";
-    c.className = "chip region-card";
+    c.className = "chip route-card";
     c.setAttribute("aria-pressed", "false");
-    c.innerHTML = '<span class="r-name">' + r.name + '</span><span class="r-vibe">' + r.vibe + '</span>';
+    c.innerHTML = '<span class="route-emoji">' + r.e + '</span><span class="r-name">' + r.name + '</span><span class="r-vibe">' + r.vibe + '</span>';
     c.addEventListener("click", function () {
-      var pressed = c.getAttribute("aria-pressed") === "true";
-      c.setAttribute("aria-pressed", String(!pressed));
-      if (pressed) state.regions.delete(r.name); else state.regions.add(r.name);
-      next3.disabled = state.regions.size === 0;
+      var chips = routeChipsEl.querySelectorAll(".chip");
+      chips.forEach(function (ch) { ch.setAttribute("aria-pressed", "false"); });
+      c.setAttribute("aria-pressed", "true");
+      state.route = r.name;
+      next3.disabled = false;
       saveState();
     });
-    regionChipsEl.appendChild(c);
+    routeChipsEl.appendChild(c);
   });
   next3.addEventListener("click", function () { goTo(3); });
 
@@ -764,7 +766,7 @@
     box.appendChild(heading);
     var rows = [
       { icon: "📅", label: "见面时间", value: formatDate(state.date) + " · " + state.time },
-      { icon: "📍", label: "想去区域", value: [...state.regions].join(" / ") },
+      { icon: "🗺", label: "选的路径", value: state.route },
       { icon: "✨", label: "想做的事", value: [...state.acts].join(" / ") }
     ];
     rows.forEach(function (r) {
@@ -780,7 +782,7 @@
   function buildCopyText() {
     return "关于约会，我的答案 💌\n" +
       "📅 " + formatDate(state.date) + " · " + state.time + "\n" +
-      "📍 " + [...state.regions].join("、") + "\n" +
+      "🗺 " + state.route + "\n" +
       "✨ " + [...state.acts].join("、") + "\n" +
       "剩下的，你安排就好 (｡･ω･｡)ﾉ";
   }
@@ -851,10 +853,10 @@
   });
 
   document.getElementById("resetBtn").addEventListener("click", function () {
-    state.date = ""; state.time = "";
-    state.regions.clear(); state.acts.clear();
+    state.date = ""; state.time = ""; state.route = "";
+    state.acts.clear();
     dateInput.value = "";
-    [timeChipsEl, regionChipsEl, actChipsEl].forEach(function (wrap) {
+    [timeChipsEl, routeChipsEl, actChipsEl].forEach(function (wrap) {
       wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
     });
     next1.disabled = true; next3.disabled = true; next4.disabled = true;
