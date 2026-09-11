@@ -225,11 +225,11 @@
   }
 
   .mascot-wrap {
-    background: linear-gradient(180deg, var(--sky) 0 72%, #cce9b7 72% 100%);
+    background: var(--sky);
     border: 3px solid var(--line);
     border-radius: 28px;
-    width: min(100%, 292px);
-    height: 180px;
+    width: min(100%, 236px);
+    height: 236px;
     margin: 2px auto 20px;
     display: flex;
     align-items: center;
@@ -239,58 +239,18 @@
     position: relative;
     box-shadow: inset 0 -5px 0 rgba(75,49,45,.06);
   }
-  .mascot-wrap::before,
-  .mascot-wrap::after {
-    content: "";
-    position: absolute;
-    background: rgba(255,255,255,.84);
-    border-radius: 999px;
-  }
-  .mascot-wrap::before { width: 76px; height: 24px; left: 24px; top: 18px; }
-  .mascot-wrap::after { width: 54px; height: 18px; right: 25px; top: 35px; }
   .mascot-gallery {
     width: 100%;
     height: 100%;
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     animation: bob 3.2s ease-in-out infinite;
   }
-  .photo-panel {
-    min-width: 0;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .cat-panel { border-right: 2px dashed rgba(75,49,45,.22); }
-  .rabbit-panel { background: linear-gradient(180deg, rgba(255,240,194,.92), rgba(255,255,255,.72)); }
-  .photo-panel img {
+  .main-photo {
     width: 100%;
     height: 100%;
     display: block;
-  }
-  .cat-panel img { object-fit: cover; object-position: 48% center; }
-  .rabbit-panel img { object-fit: contain; padding: 9px 3px 3px; transform: scale(1.08); }
-  .pair-heart {
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    top: 49%;
-    transform: translate(-50%, -50%) rotate(-7deg);
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--line);
-    border-radius: 50%;
-    background: var(--pink);
-    color: white;
-    font-size: 20px;
-    line-height: 1;
-    box-shadow: 0 3px 0 rgba(75,49,45,.18);
+    object-fit: contain;
   }
   @keyframes bob {
     0%, 100% { transform: translateY(0) rotate(-1.5deg); }
@@ -546,7 +506,7 @@
   @media (max-width: 380px) {
     body { padding: 10px 10px 18px; }
     .card { padding: 16px 17px 18px; border-radius: 28px; }
-    .mascot-wrap { height: 166px; }
+    .mascot-wrap { width: 214px; height: 214px; }
     .btn-row.inline { flex-direction: column; }
   }
 </style>
@@ -568,10 +528,8 @@
     <section class="step active" data-step="0">
       <div class="center-block">
         <div class="mascot-wrap">
-          <div class="mascot-gallery" role="img" aria-label="猫猫和兔兔原图">
-            <div class="photo-panel cat-panel"><img src="assets/cat-original.png" alt="" /></div>
-            <div class="photo-panel rabbit-panel"><img src="assets/rabbit-original-cutout.png" alt="" /></div>
-            <span class="pair-heart" aria-hidden="true">♥</span>
+          <div class="mascot-gallery" role="img" aria-label="兔兔照镜子，镜子里是猫猫">
+            <img class="main-photo" src="assets/mirror-main-original.png" alt="" />
           </div>
         </div>
         <p class="eyebrow">一份软乎乎的邀请</p>
