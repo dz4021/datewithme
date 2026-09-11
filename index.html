@@ -1,72 +1,85 @@
-<title>DateWithMe</title>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#c8edf7" />
+<meta name="description" content="猫猫和兔兔送来的一份约会邀请" />
+<title>DateWithMe · 猫兔约会局</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 
   :root {
-    --paper: #fffcf7;
-    --surface: #ffffff;
-    --ink: #241a1d;
-    --ink-soft: #4a3a3e;
-    --muted: #9c8890;
-    --line: #241a1d;
-    --accent: #ff2e76;
-    --accent-strong: #e0195f;
-    --accent-soft: #ffd6e3;
-    --accent-wash: #fff0f4;
-    --chip-bg: #ffffff;
-    --shadow-1: 0 22px 46px -18px rgba(224, 25, 95, 0.28);
-    --shadow-2: 0 2px 0 rgba(36, 26, 29, 0.9);
-    --focus: #ff2e76;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #1b1315;
-      --surface: #241a1d;
-      --ink: #f7ebee;
-      --ink-soft: #d9c3c9;
-      --muted: #a58891;
-      --line: #f7ebee;
-      --accent: #ff5c93;
-      --accent-strong: #ff85ac;
-      --accent-soft: #4a2530;
-      --accent-wash: #2c1a20;
-      --chip-bg: #2c2023;
-      --shadow-1: 0 22px 46px -18px rgba(255, 92, 147, 0.35);
-      --shadow-2: 0 2px 0 rgba(0, 0, 0, 0.6);
-      --focus: #ff85ac;
-    }
-  }
-
-  :root[data-theme="dark"] {
-    --paper: #1b1315;
-    --surface: #241a1d;
-    --ink: #f7ebee;
-    --ink-soft: #d9c3c9;
-    --muted: #a58891;
-    --line: #f7ebee;
-    --accent: #ff5c93;
-    --accent-strong: #ff85ac;
-    --accent-soft: #4a2530;
-    --accent-wash: #2c1a20;
-    --chip-bg: #2c2023;
-    --shadow-1: 0 22px 46px -18px rgba(255, 92, 147, 0.35);
-    --shadow-2: 0 2px 0 rgba(0, 0, 0, 0.6);
-    --focus: #ff85ac;
+    color-scheme: light;
+    --paper: #dff5fb;
+    --surface: #fffaf0;
+    --surface-strong: #ffffff;
+    --ink: #4b312d;
+    --ink-soft: #684c46;
+    --muted: #987e77;
+    --line: #4b312d;
+    --sky: #b9e6f3;
+    --sky-strong: #78b9d3;
+    --cream: #fff0c2;
+    --cream-strong: #f5da91;
+    --pink: #f7acbb;
+    --pink-strong: #ed7f99;
+    --grass: #bddd9f;
+    --cat: #fffdf8;
+    --cat-blue: #85abc7;
+    --accent: #83c5dd;
+    --accent-strong: #4d9ebe;
+    --accent-soft: #ccecf5;
+    --accent-wash: #eef9fc;
+    --chip-bg: #fffefa;
+    --shadow-1: 0 24px 48px -20px rgba(75, 49, 45, .28), 0 8px 0 rgba(120, 185, 211, .16);
+    --shadow-2: 0 3px 0 #4b312d;
+    --focus: #ed7f99;
   }
 
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    background: var(--paper);
+    background:
+      radial-gradient(ellipse 90px 34px at 12% 12%, rgba(255,255,255,.9) 0 64%, transparent 66%),
+      radial-gradient(ellipse 120px 42px at 88% 22%, rgba(255,255,255,.7) 0 64%, transparent 66%),
+      linear-gradient(180deg, #c8edf7 0%, var(--paper) 68%, #dff2d2 100%);
     color: var(--ink);
     font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px 16px 40px;
+    padding: 18px 16px 28px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+  }
+  body::before {
+    width: 155px;
+    height: 82px;
+    left: -42px;
+    bottom: -24px;
+    background: var(--grass);
+    border-radius: 70% 70% 0 0;
+    transform: rotate(8deg);
+  }
+  body::after {
+    width: 190px;
+    height: 95px;
+    right: -58px;
+    bottom: -35px;
+    background: #c7e8b6;
+    border-radius: 65% 65% 0 0;
+    transform: rotate(-7deg);
   }
 
   h1, h2, .display {
@@ -77,19 +90,19 @@
 
   .stage {
     width: 100%;
-    max-width: 440px;
+    max-width: 448px;
     position: relative;
   }
 
   .card {
-    background: var(--surface);
+    background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,250,240,.98));
     border: 3px solid var(--line);
-    border-radius: 32px;
+    border-radius: 34px;
     box-shadow: var(--shadow-1);
-    padding: 26px 22px 22px;
+    padding: 20px 22px 22px;
     position: relative;
     overflow: hidden;
-    min-height: 560px;
+    min-height: min(650px, calc(100dvh - 46px));
     display: flex;
     flex-direction: column;
   }
@@ -102,18 +115,18 @@
   }
   .deco-hearts span {
     position: absolute;
-    color: var(--accent-soft);
+    color: var(--pink);
     line-height: 1;
   }
-  .deco-hearts span:nth-child(1) { top: 16px; right: 20px; font-size: 22px; opacity: .7; transform: rotate(10deg); }
-  .deco-hearts span:nth-child(2) { bottom: 90px; left: 10px; font-size: 15px; opacity: .5; transform: rotate(-12deg); }
-  .deco-hearts span:nth-child(3) { top: 44%; right: -4px; font-size: 17px; opacity: .4; transform: rotate(6deg); }
+  .deco-hearts span:nth-child(1) { top: 64px; right: 16px; font-size: 16px; opacity: .6; transform: rotate(10deg); }
+  .deco-hearts span:nth-child(2) { bottom: 94px; left: 11px; font-size: 13px; opacity: .45; transform: rotate(-12deg); }
+  .deco-hearts span:nth-child(3) { top: 47%; right: -3px; font-size: 15px; opacity: .4; transform: rotate(6deg); }
 
   .topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     min-height: 32px;
   }
 
@@ -139,17 +152,17 @@
     margin: 0 auto;
   }
   .dots span {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: var(--accent-soft);
     transition: background .25s, transform .25s;
   }
   .dots span.active {
-    background: var(--accent);
+    background: var(--pink-strong);
     transform: scale(1.3);
   }
-  .dots span.done { background: var(--accent-strong); }
+  .dots span.done { background: var(--sky-strong); }
 
   .spacer32 { width: 32px; }
 
@@ -161,10 +174,16 @@
     font-family: 'ZCOOL KuaiLe', 'PingFang SC', sans-serif;
     font-size: 15px;
     letter-spacing: .02em;
-    color: var(--accent-strong);
-    margin-bottom: 14px;
+    color: var(--ink-soft);
+    margin: 0 auto 8px;
+    width: fit-content;
+    padding: 5px 11px;
+    border: 2px solid var(--line);
+    border-radius: 999px;
+    background: var(--cream);
+    box-shadow: 0 2px 0 rgba(75,49,45,.18);
   }
-  .brand .heart { font-size: 12px; }
+  .brand .heart { font-size: 12px; color: var(--pink-strong); }
 
   .step {
     display: none;
@@ -195,30 +214,45 @@
     font-size: clamp(22px, 6vw, 27px);
     margin: 0 0 8px;
     line-height: 1.3;
+    color: var(--ink);
   }
 
   .subtitle {
     font-size: 14px;
     color: var(--muted);
-    margin: 0 0 20px;
+    margin: 0 0 18px;
     line-height: 1.6;
   }
 
   .mascot-wrap {
-    background: var(--accent-soft);
+    background: linear-gradient(180deg, var(--sky) 0 72%, #cce9b7 72% 100%);
     border: 3px solid var(--line);
-    border-radius: 26px;
-    width: 168px;
-    height: 168px;
-    margin: 4px auto 22px;
+    border-radius: 28px;
+    width: min(100%, 292px);
+    height: 180px;
+    margin: 2px auto 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
   }
+    position: relative;
+    box-shadow: inset 0 -5px 0 rgba(75,49,45,.06);
+  }
+  .mascot-wrap::before,
+  .mascot-wrap::after {
+    content: "";
+    position: absolute;
+    background: rgba(255,255,255,.84);
+    border-radius: 999px;
+  }
+  .mascot-wrap::before { width: 76px; height: 24px; left: 24px; top: 18px; }
+  .mascot-wrap::after { width: 54px; height: 18px; right: 25px; top: 35px; }
   .mascot {
-    width: 118px;
-    height: 118px;
+    width: 282px;
+    height: 176px;
+    position: relative;
+    z-index: 1;
     animation: bob 3.2s ease-in-out infinite;
   }
   @keyframes bob {
@@ -228,6 +262,24 @@
   @media (prefers-reduced-motion: reduce) {
     .mascot { animation: none; }
   }
+
+  .step-heading {
+    display: grid;
+    grid-template-columns: 1fr 58px;
+    gap: 12px;
+    align-items: start;
+  }
+  .step-pal {
+    width: 58px;
+    height: 58px;
+    padding: 3px;
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    background: var(--accent-soft);
+    transform: rotate(3deg);
+  }
+  .step-pal.rabbit { background: var(--cream); transform: rotate(-3deg); }
+  .step-pal.pair { width: 76px; height: 58px; background: linear-gradient(135deg, var(--accent-soft), var(--cream)); }
 
   .center-block { text-align: center; }
 
@@ -255,12 +307,12 @@
   button.btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
   .btn-primary {
-    background: var(--accent);
+    background: var(--pink);
     color: var(--ink);
     box-shadow: var(--shadow-2);
     flex: 1;
   }
-  .btn-primary:hover { background: var(--accent-strong); }
+  .btn-primary:hover { background: var(--pink-strong); }
   .btn-primary:disabled {
     opacity: .45;
     cursor: not-allowed;
@@ -268,7 +320,7 @@
   }
 
   .btn-ghost {
-    background: transparent;
+    background: var(--surface-strong);
     color: var(--ink-soft);
     border-color: var(--muted);
     flex: 1;
@@ -309,7 +361,7 @@
     color: var(--ink);
     background: var(--chip-bg);
     border: 2.5px solid var(--line);
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 13px 14px;
   }
   input[type="date"]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
@@ -326,7 +378,7 @@
     background: var(--chip-bg);
     border: 2px solid var(--line);
     color: var(--ink);
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 10px 13px;
     font-size: 13.5px;
     font-weight: 500;
@@ -338,11 +390,12 @@
   .chip:active { transform: scale(.97); }
   .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .chip[aria-pressed="true"] {
-    background: var(--accent-soft);
-    border-color: var(--accent);
+    background: var(--cream);
+    border-color: var(--line);
     font-weight: 700;
+    box-shadow: inset 0 -3px 0 var(--cream-strong);
   }
-  .chip[aria-pressed="true"]:not(.route-card)::before { content: "♥ "; }
+  .chip[aria-pressed="true"]:not(.route-card)::before { content: "♡ "; color: var(--pink-strong); }
 
   .chip-time { flex: 1 1 30%; }
 
@@ -356,12 +409,12 @@
     padding: 22px 12px;
   }
   .route-card::after {
-    content: "♥";
+    content: "♡";
     position: absolute;
     top: 6px;
     right: 8px;
     font-size: 11px;
-    color: var(--accent);
+    color: var(--pink-strong);
     opacity: 0;
     transform: scale(.5);
     transition: opacity .15s, transform .15s;
@@ -373,14 +426,14 @@
   .route-emoji { font-size: 26px; }
   .route-card .r-name { font-size: 15px; font-weight: 700; }
   .route-card .r-vibe { font-size: 11.5px; color: var(--muted); font-weight: 400; line-height: 1.4; }
-  .route-card[aria-pressed="true"] .r-vibe { color: var(--accent-strong); }
+  .route-card[aria-pressed="true"] .r-vibe { color: var(--ink-soft); }
 
   .recap {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    background: var(--accent-wash);
-    border: 2.5px dashed var(--accent);
+    background: linear-gradient(145deg, var(--accent-wash), #fff8df);
+    border: 2.5px dashed var(--sky-strong);
     border-radius: 20px;
     padding: 16px 16px 14px;
     margin-bottom: 16px;
@@ -389,7 +442,7 @@
   .recap-heading {
     font-family: 'ZCOOL KuaiLe', 'PingFang SC', sans-serif;
     font-size: 15px;
-    color: var(--accent-strong);
+    color: var(--ink-soft);
     text-align: center;
     margin-bottom: 2px;
   }
@@ -400,7 +453,7 @@
 
   .copy-feedback {
     font-size: 12.5px;
-    color: var(--accent-strong);
+    color: var(--pink-strong);
     text-align: center;
     font-weight: 700;
     height: 16px;
@@ -439,13 +492,55 @@
     color: var(--muted);
     margin-top: 14px;
   }
+
+  @media (max-width: 380px) {
+    body { padding: 10px 10px 18px; }
+    .card { padding: 16px 17px 18px; border-radius: 28px; }
+    .mascot-wrap { height: 166px; }
+    .mascot { height: 163px; }
+    .btn-row.inline { flex-direction: column; }
+  }
 </style>
+</head>
+<body>
+
+<!-- Reusable, code-native mascots keep the whole experience in one portable HTML file. -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="mascot-cat" viewBox="0 0 120 120">
+      <path d="M18 52L21 28C22 22 27 20 31 25L43 39C54 35 68 35 79 39L94 25C99 20 103 23 103 30L101 54C111 64 113 79 109 92C104 108 86 115 61 115C35 115 17 108 12 92C8 78 10 64 18 52Z" fill="var(--cat)" stroke="var(--line)" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="M20 53L22 30C23 24 27 23 31 28L43 42C56 36 70 37 80 42L95 27C99 23 101 26 101 32L99 55C88 63 74 65 60 59L51 48C43 57 30 60 20 53Z" fill="var(--cat-blue)" stroke="var(--line)" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="M31 71Q37 66 43 71" stroke="var(--line)" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M75 70Q81 68 86 72" stroke="var(--line)" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <ellipse cx="28" cy="84" rx="12" ry="7" fill="var(--pink)"/>
+      <ellipse cx="91" cy="84" rx="12" ry="7" fill="var(--pink)"/>
+      <path d="M27 81L24 87M33 80L31 87M39 81L38 87M80 81L78 87M86 80L84 87M92 81L91 87" stroke="var(--line)" stroke-width="2.3" stroke-linecap="round"/>
+      <path d="M53 78Q60 86 67 78M60 84V88" stroke="var(--line)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M53 89Q60 99 67 89Z" fill="var(--pink)" stroke="var(--line)" stroke-width="3.2" stroke-linejoin="round"/>
+      <path d="M18 101Q26 95 31 104M103 101Q95 95 90 104" stroke="var(--line)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="mascot-rabbit" viewBox="0 0 120 120">
+      <path d="M42 48C39 33 38 12 44 7C48 3 52 8 53 15L55 46" fill="var(--cream)" stroke="var(--line)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M66 46L67 15C68 8 73 4 77 8C83 14 80 35 78 50" fill="var(--cream)" stroke="var(--line)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M46 39C45 28 45 15 47 12M73 39C74 28 74 16 76 12" stroke="var(--pink)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M60 39C86 39 104 54 108 77C112 100 93 114 61 115C28 115 9 103 12 78C15 55 34 39 60 39Z" fill="var(--cream)" stroke="var(--line)" stroke-width="4.5" stroke-linejoin="round"/>
+      <circle cx="42" cy="75" r="7" fill="var(--line)"/>
+      <circle cx="78" cy="75" r="7" fill="var(--line)"/>
+      <circle cx="44" cy="72" r="2.4" fill="white"/>
+      <circle cx="80" cy="72" r="2.4" fill="white"/>
+      <ellipse cx="25" cy="86" rx="10" ry="6.5" fill="var(--pink)"/>
+      <ellipse cx="95" cy="86" rx="10" ry="6.5" fill="var(--pink)"/>
+      <path d="M22 83L19 88M28 82L26 88M34 83L32 88M88 83L86 88M94 82L92 88M100 83L98 88" stroke="var(--line)" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M54 82Q60 89 66 82M60 88V94M60 94Q55 97 52 93M60 94Q65 98 68 93" stroke="var(--line)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
 
 <div class="stage">
   <div class="card" id="card">
     <div class="hearts-fx" id="heartsFx" aria-hidden="true"></div>
-    <div class="deco-hearts" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span></div>
-    <div class="brand"><span class="heart">💌</span>DateWithMe</div>
+    <div class="deco-hearts" aria-hidden="true"><span>♡</span><span>☁</span><span>♡</span></div>
+    <div class="brand"><span class="heart">♡</span>DateWithMe · 猫兔约会局</div>
     <div class="topbar">
       <button class="back-btn" id="backBtn" aria-label="上一步" type="button">←</button>
       <div class="dots" id="dots"></div>
@@ -456,21 +551,16 @@
     <section class="step active" data-step="0">
       <div class="center-block">
         <div class="mascot-wrap">
-          <svg class="mascot" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="70" cy="82" rx="52" ry="44" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5"/>
-            <ellipse cx="27" cy="88" rx="14" ry="20" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5" transform="rotate(-18 27 88)"/>
-            <ellipse cx="113" cy="88" rx="14" ry="20" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5" transform="rotate(18 113 88)"/>
-            <circle cx="53" cy="72" r="4.2" fill="var(--line)"/>
-            <circle cx="87" cy="72" r="4.2" fill="var(--line)"/>
-            <ellipse cx="46" cy="86" rx="8" ry="5" fill="var(--accent-soft)"/>
-            <ellipse cx="94" cy="86" rx="8" ry="5" fill="var(--accent-soft)"/>
-            <path d="M62 90 Q70 96 78 90" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-            <path d="M70 58C64 48 48 50 48 64C48 76 70 92 70 92C70 92 92 76 92 64C92 50 76 48 70 58Z" fill="var(--accent)" stroke="var(--line)" stroke-width="4"/>
+          <svg class="mascot" viewBox="0 0 300 190" xmlns="http://www.w3.org/2000/svg" aria-label="猫猫和兔兔">
+            <use href="#mascot-cat" x="4" y="43" width="142" height="142"/>
+            <use href="#mascot-rabbit" x="157" y="38" width="140" height="140"/>
+            <path d="M150 82C144 72 128 75 130 88C132 100 150 110 150 110C150 110 168 100 170 88C172 75 156 72 150 82Z" fill="var(--pink)" stroke="var(--line)" stroke-width="4"/>
+            <path d="M0 170Q42 149 83 169T166 168T250 168T320 164V195H0Z" fill="#bddd9f" opacity=".9"/>
           </svg>
         </div>
-        <p class="eyebrow">来自TA的暗号</p>
+        <p class="eyebrow">一份软乎乎的邀请</p>
         <h2 class="title">可以约你出来玩吗？</h2>
-        <p class="subtitle">装作云淡风轻发出去，其实已经等你回复很久了</p>
+        <p class="subtitle">猫猫和兔兔假装路过，其实已经等你的回答很久啦</p>
       </div>
       <div class="btn-row">
         <button class="btn btn-primary" id="acceptBtn" type="button">愿意呀 ♥</button>
@@ -481,9 +571,14 @@
 
     <!-- Step 1: date + time -->
     <section class="step" data-step="1">
-      <p class="eyebrow">第一步</p>
-      <h2 class="title">什么时候能见到你？</h2>
-      <p class="subtitle">挑一个你方便的日子，具体时间也大致定一下</p>
+      <div class="step-heading">
+        <div>
+          <p class="eyebrow">第一步 · 兔兔值班</p>
+          <h2 class="title">什么时候能见到你？</h2>
+          <p class="subtitle">挑一个你方便的日子，具体时间也大致定一下</p>
+        </div>
+        <svg class="step-pal rabbit" viewBox="0 0 120 120" aria-hidden="true"><use href="#mascot-rabbit"/></svg>
+      </div>
 
       <div class="field-block">
         <fieldset>
@@ -506,9 +601,14 @@
 
     <!-- Step 2: mystery route -->
     <section class="step" data-step="2">
-      <p class="eyebrow">第二步 · 神秘惊喜</p>
-      <h2 class="title">选一条约会路径</h2>
-      <p class="subtitle">具体去哪先保密，选完当天见分晓</p>
+      <div class="step-heading">
+        <div>
+          <p class="eyebrow">第二步 · 猫猫带路</p>
+          <h2 class="title">选一条约会路径</h2>
+          <p class="subtitle">具体去哪先保密，选完当天见分晓</p>
+        </div>
+        <svg class="step-pal" viewBox="0 0 120 120" aria-hidden="true"><use href="#mascot-cat"/></svg>
+      </div>
       <div class="chip-wrap pair" id="routeChips" role="group" aria-label="约会路径"></div>
       <div class="btn-row">
         <button class="btn btn-primary" id="next3" type="button" disabled>生成答案 →</button>
@@ -517,9 +617,17 @@
 
     <!-- Step 3: reveal -->
     <section class="step" data-step="3">
-      <p class="eyebrow">暗号已生成</p>
-      <h2 class="title">答案都给TA了</h2>
-      <p class="subtitle">把这张卡片复制或截图发回去就好</p>
+      <div class="step-heading">
+        <div>
+          <p class="eyebrow">猫兔约会局 · 匹配成功</p>
+          <h2 class="title">答案都给TA了</h2>
+          <p class="subtitle">把这张卡片分享回去，接下来就等见面啦</p>
+        </div>
+        <svg class="step-pal pair" viewBox="0 0 170 120" aria-hidden="true">
+          <use href="#mascot-cat" x="0" y="8" width="94" height="94"/>
+          <use href="#mascot-rabbit" x="76" y="6" width="92" height="92"/>
+        </svg>
+      </div>
 
       <div class="recap" id="recapBox"></div>
 
@@ -558,12 +666,12 @@
 
   var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00"];
   var ROUTES = [
-    { e: "🎲", name: "约会路径 1", vibe: "开盲盒，惊喜不解释" },
-    { e: "🔮", name: "约会路径 2", vibe: "抽个签，玄学但用心" }
+    { e: "🐾", name: "约会路径 1", vibe: "猫猫带路，惊喜不解释" },
+    { e: "🌙", name: "约会路径 2", vibe: "兔兔抽签，玄学但用心" }
   ];
   var TEASE_LINES = [
-    "才怪，明明超期待 (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
-    "骗不了我的，快选愿意啦",
+    "才怪，猫猫都看出来啦 (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
+    "兔兔的耳朵都等得竖起来了",
     "嘴上说不要，手指已经点过来了",
     "再装也没用哦，愿意吧～"
   ];
@@ -706,11 +814,11 @@
     box.innerHTML = "";
     var heading = document.createElement("div");
     heading.className = "recap-heading";
-    heading.textContent = "💌 DateWithMe · 答案卡";
+    heading.textContent = "🐱🐰 DateWithMe · 答案卡";
     box.appendChild(heading);
     var rows = [
       { icon: "📅", label: "见面时间", value: formatDate(state.date) + " · " + state.time },
-      { icon: "🗺", label: "选的路径", value: state.route }
+      { icon: "🐾", label: "选的路径", value: state.route }
     ];
     rows.forEach(function (r) {
       var row = document.createElement("div");
@@ -723,9 +831,9 @@
   }
 
   function buildCopyText() {
-    return "关于约会，我的答案 💌\n" +
+    return "关于约会，我的答案 🐱🐰\n" +
       "📅 " + formatDate(state.date) + " · " + state.time + "\n" +
-      "🗺 " + state.route + "\n" +
+      "🐾 " + state.route + "\n" +
       "剩下的，你安排就好 (｡･ω･｡)ﾉ";
   }
 
@@ -809,7 +917,7 @@
   function spawnHearts() {
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     var fx = document.getElementById("heartsFx");
-    var glyphs = ["💗", "💌", "✨", "💕"];
+    var glyphs = ["💗", "🐾", "✨", "🌸"];
     for (var i = 0; i < 8; i++) {
       (function (i) {
         setTimeout(function () {
@@ -826,6 +934,21 @@
 
   loadState();
   if (state.date) dateInput.value = state.date;
+  if (state.time) {
+    timeChipsEl.querySelectorAll(".chip").forEach(function (chip) {
+      chip.setAttribute("aria-pressed", String(chip.textContent === state.time));
+    });
+  }
+  if (state.route) {
+    routeChipsEl.querySelectorAll(".chip").forEach(function (chip) {
+      var selected = chip.querySelector(".r-name").textContent === state.route;
+      chip.setAttribute("aria-pressed", String(selected));
+    });
+  }
+  next1.disabled = !(state.date && state.time);
+  next3.disabled = !state.route;
   goTo(0);
 })();
 </script>
+</body>
+</html>
