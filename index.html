@@ -3,70 +3,63 @@
   @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 
   :root {
-    --paper: #fff0f5;
-    --paper-2: #ffe1ec;
-    --surface: #fffafc;
-    --ink: #5c1f3a;
-    --ink-soft: #96496b;
-    --muted: #c98aa4;
-    --line: #ffb3cb;
-    --accent: #ff5c93;
-    --accent-strong: #e63d78;
-    --accent-soft: #ffd9e6;
-    --accent-wash: #fff2f7;
+    --paper: #fffcf7;
+    --surface: #ffffff;
+    --ink: #241a1d;
+    --ink-soft: #4a3a3e;
+    --muted: #9c8890;
+    --line: #241a1d;
+    --accent: #ff2e76;
+    --accent-strong: #e0195f;
+    --accent-soft: #ffd6e3;
+    --accent-wash: #fff0f4;
     --chip-bg: #ffffff;
-    --heart-tex: #ffc9dc;
-    --shadow-1: 0 26px 50px -20px rgba(230, 61, 120, 0.35);
-    --shadow-2: 0 8px 20px -8px rgba(230, 61, 120, 0.55);
-    --focus: #e63d78;
+    --shadow-1: 0 22px 46px -18px rgba(224, 25, 95, 0.28);
+    --shadow-2: 0 2px 0 rgba(36, 26, 29, 0.9);
+    --focus: #ff2e76;
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --paper: #2a1420;
-      --paper-2: #341726;
-      --surface: #3a1a2a;
-      --ink: #ffe3ee;
-      --ink-soft: #f0b6cc;
-      --muted: #c1849f;
-      --line: #ff8fb3;
-      --accent: #ff6fa0;
-      --accent-strong: #ff9dbe;
-      --accent-soft: #532438;
-      --accent-wash: #3a1a2a;
-      --chip-bg: #452032;
-      --heart-tex: #4d2436;
-      --shadow-1: 0 26px 50px -18px rgba(255, 111, 160, 0.4);
-      --shadow-2: 0 8px 20px -8px rgba(255, 111, 160, 0.5);
-      --focus: #ff9dbe;
+      --paper: #1b1315;
+      --surface: #241a1d;
+      --ink: #f7ebee;
+      --ink-soft: #d9c3c9;
+      --muted: #a58891;
+      --line: #f7ebee;
+      --accent: #ff5c93;
+      --accent-strong: #ff85ac;
+      --accent-soft: #4a2530;
+      --accent-wash: #2c1a20;
+      --chip-bg: #2c2023;
+      --shadow-1: 0 22px 46px -18px rgba(255, 92, 147, 0.35);
+      --shadow-2: 0 2px 0 rgba(0, 0, 0, 0.6);
+      --focus: #ff85ac;
     }
   }
 
   :root[data-theme="dark"] {
-    --paper: #2a1420;
-    --paper-2: #341726;
-    --surface: #3a1a2a;
-    --ink: #ffe3ee;
-    --ink-soft: #f0b6cc;
-    --muted: #c1849f;
-    --line: #ff8fb3;
-    --accent: #ff6fa0;
-    --accent-strong: #ff9dbe;
-    --accent-soft: #532438;
-    --accent-wash: #3a1a2a;
-    --chip-bg: #452032;
-    --heart-tex: #4d2436;
-    --shadow-1: 0 26px 50px -18px rgba(255, 111, 160, 0.4);
-    --shadow-2: 0 8px 20px -8px rgba(255, 111, 160, 0.5);
-    --focus: #ff9dbe;
+    --paper: #1b1315;
+    --surface: #241a1d;
+    --ink: #f7ebee;
+    --ink-soft: #d9c3c9;
+    --muted: #a58891;
+    --line: #f7ebee;
+    --accent: #ff5c93;
+    --accent-strong: #ff85ac;
+    --accent-soft: #4a2530;
+    --accent-wash: #2c1a20;
+    --chip-bg: #2c2023;
+    --shadow-1: 0 22px 46px -18px rgba(255, 92, 147, 0.35);
+    --shadow-2: 0 2px 0 rgba(0, 0, 0, 0.6);
+    --focus: #ff85ac;
   }
 
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    background: linear-gradient(160deg, var(--paper) 0%, var(--paper-2) 100%);
-    background-attachment: fixed;
+    background: var(--paper);
     color: var(--ink);
     font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
     min-height: 100vh;
@@ -74,19 +67,6 @@
     align-items: center;
     justify-content: center;
     padding: 32px 16px 40px;
-    position: relative;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    opacity: .5;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='64' viewBox='0 0 72 64'%3E%3Cpath d='M18 12C13 4 2 6 2 16c0 10 16 20 16 20s16-10 16-20C34 6 23 4 18 12Z' fill='%23ffb3cb' fill-opacity='.35'/%3E%3Cpath d='M56 34c-4-6-12-4-12 3s12 15 12 15 12-8 12-15-8-9-12-3Z' fill='%23ffb3cb' fill-opacity='.28'/%3E%3C/svg%3E");
-    background-size: 220px 196px;
-    background-repeat: repeat;
-    z-index: 0;
   }
 
   h1, h2, .display {
@@ -99,12 +79,11 @@
     width: 100%;
     max-width: 440px;
     position: relative;
-    z-index: 1;
   }
 
   .card {
     background: var(--surface);
-    border: 1.5px solid var(--line);
+    border: 3px solid var(--line);
     border-radius: 32px;
     box-shadow: var(--shadow-1);
     padding: 26px 22px 22px;
@@ -114,6 +93,21 @@
     display: flex;
     flex-direction: column;
   }
+
+  .deco-hearts {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .deco-hearts span {
+    position: absolute;
+    color: var(--accent-soft);
+    line-height: 1;
+  }
+  .deco-hearts span:nth-child(1) { top: 16px; right: 20px; font-size: 22px; opacity: .7; transform: rotate(10deg); }
+  .deco-hearts span:nth-child(2) { bottom: 90px; left: 10px; font-size: 15px; opacity: .5; transform: rotate(-12deg); }
+  .deco-hearts span:nth-child(3) { top: 44%; right: -4px; font-size: 17px; opacity: .4; transform: rotate(6deg); }
 
   .topbar {
     display: flex;
@@ -211,8 +205,8 @@
   }
 
   .mascot-wrap {
-    background: radial-gradient(circle at 32% 28%, var(--accent-wash), var(--accent-soft));
-    border: 1.5px solid var(--line);
+    background: var(--accent-soft);
+    border: 3px solid var(--line);
     border-radius: 26px;
     width: 168px;
     height: 168px;
@@ -253,7 +247,7 @@
     padding: 14px 18px;
     border-radius: 999px;
     cursor: pointer;
-    border: 1.5px solid var(--line);
+    border: 2.5px solid var(--line);
     transition: transform .12s ease, box-shadow .12s ease, background .2s;
     -webkit-tap-highlight-color: transparent;
   }
@@ -261,24 +255,22 @@
   button.btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
   .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-    border-color: transparent;
-    color: #fff;
+    background: var(--accent);
+    color: var(--ink);
     box-shadow: var(--shadow-2);
     flex: 1;
   }
-  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-primary:hover { background: var(--accent-strong); }
   .btn-primary:disabled {
     opacity: .45;
     cursor: not-allowed;
     box-shadow: none;
-    filter: none;
   }
 
   .btn-ghost {
     background: transparent;
     color: var(--ink-soft);
-    border-color: var(--line);
+    border-color: var(--muted);
     flex: 1;
   }
   .btn-ghost:hover { background: var(--accent-wash); color: var(--ink); }
@@ -316,7 +308,7 @@
     font-size: 16px;
     color: var(--ink);
     background: var(--chip-bg);
-    border: 1.5px solid var(--line);
+    border: 2.5px solid var(--line);
     border-radius: 16px;
     padding: 13px 14px;
   }
@@ -333,7 +325,7 @@
   .chip {
     font-family: 'Noto Sans SC', sans-serif;
     background: var(--chip-bg);
-    border: 1.5px solid var(--line);
+    border: 2px solid var(--line);
     color: var(--ink);
     border-radius: 14px;
     padding: 10px 13px;
@@ -347,11 +339,9 @@
   .chip:active { transform: scale(.97); }
   .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .chip[aria-pressed="true"] {
-    background: linear-gradient(135deg, var(--accent-soft), var(--accent-wash));
+    background: var(--accent-soft);
     border-color: var(--accent);
-    color: var(--accent-strong);
     font-weight: 700;
-    box-shadow: 0 4px 12px -6px rgba(230, 61, 120, 0.5);
   }
   .chip[aria-pressed="true"]:not(.region-card):not(.act-card)::before { content: "♥ "; }
 
@@ -469,6 +459,7 @@
 <div class="stage">
   <div class="card" id="card">
     <div class="hearts-fx" id="heartsFx" aria-hidden="true"></div>
+    <div class="deco-hearts" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span></div>
     <div class="brand"><span class="heart">💌</span>DateWithMe</div>
     <div class="topbar">
       <button class="back-btn" id="backBtn" aria-label="上一步" type="button">←</button>
@@ -481,15 +472,15 @@
       <div class="center-block">
         <div class="mascot-wrap">
           <svg class="mascot" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="70" cy="82" rx="52" ry="44" fill="var(--surface)" stroke="var(--line)" stroke-width="3"/>
-            <ellipse cx="27" cy="88" rx="14" ry="20" fill="var(--surface)" stroke="var(--line)" stroke-width="3" transform="rotate(-18 27 88)"/>
-            <ellipse cx="113" cy="88" rx="14" ry="20" fill="var(--surface)" stroke="var(--line)" stroke-width="3" transform="rotate(18 113 88)"/>
-            <circle cx="53" cy="72" r="4.2" fill="var(--ink-soft)"/>
-            <circle cx="87" cy="72" r="4.2" fill="var(--ink-soft)"/>
+            <ellipse cx="70" cy="82" rx="52" ry="44" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5"/>
+            <ellipse cx="27" cy="88" rx="14" ry="20" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5" transform="rotate(-18 27 88)"/>
+            <ellipse cx="113" cy="88" rx="14" ry="20" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5" transform="rotate(18 113 88)"/>
+            <circle cx="53" cy="72" r="4.2" fill="var(--line)"/>
+            <circle cx="87" cy="72" r="4.2" fill="var(--line)"/>
             <ellipse cx="46" cy="86" rx="8" ry="5" fill="var(--accent-soft)"/>
             <ellipse cx="94" cy="86" rx="8" ry="5" fill="var(--accent-soft)"/>
-            <path d="M62 90 Q70 96 78 90" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round" fill="none"/>
-            <path d="M70 58C64 48 48 50 48 64C48 76 70 92 70 92C70 92 92 76 92 64C92 50 76 48 70 58Z" fill="var(--accent)" stroke="var(--ink-soft)" stroke-width="2.5"/>
+            <path d="M62 90 Q70 96 78 90" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            <path d="M70 58C64 48 48 50 48 64C48 76 70 92 70 92C70 92 92 76 92 64C92 50 76 48 70 58Z" fill="var(--accent)" stroke="var(--line)" stroke-width="4"/>
           </svg>
         </div>
         <p class="eyebrow">来自TA的暗号</p>
