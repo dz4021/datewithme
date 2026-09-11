@@ -319,7 +319,7 @@
     flex-wrap: wrap;
     gap: 9px;
   }
-  .chip-wrap.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .chip-wrap.list { flex-direction: column; gap: 10px; }
   .chip-wrap.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
 
   .chip {
@@ -383,12 +383,6 @@
     line-height: 1.5;
   }
   .act-emoji { font-size: 21px; display: block; margin-bottom: 3px; }
-
-  .scroll-area {
-    overflow-y: auto;
-    padding-right: 2px;
-    margin-right: -2px;
-  }
 
   .recap {
     display: flex;
@@ -519,33 +513,20 @@
       </div>
     </section>
 
-    <!-- Step 2: general availability tags -->
+    <!-- Step 2: Shanghai regions -->
     <section class="step" data-step="2">
-      <p class="eyebrow">第二步</p>
-      <h2 class="title">大概是这样的时段？</h2>
-      <p class="subtitle">可以多选，选得越多我越安心</p>
-      <div class="chip-wrap" id="availChips" role="group" aria-label="方便的时段"></div>
-      <div class="btn-row">
-        <button class="btn btn-primary" id="next2" type="button" disabled>继续 →</button>
-      </div>
-    </section>
-
-    <!-- Step 3: Shanghai regions -->
-    <section class="step" data-step="3">
-      <p class="eyebrow">第三步 · 上海</p>
+      <p class="eyebrow">第二步 · 上海</p>
       <h2 class="title">想在哪一片见面？</h2>
       <p class="subtitle">选你顺路或喜欢的区域，可以多选</p>
-      <div class="scroll-area" style="max-height: 300px;">
-        <div class="chip-wrap grid2" id="regionChips" role="group" aria-label="上海区域"></div>
-      </div>
+      <div class="chip-wrap list" id="regionChips" role="group" aria-label="上海区域"></div>
       <div class="btn-row">
         <button class="btn btn-primary" id="next3" type="button" disabled>继续 →</button>
       </div>
     </section>
 
-    <!-- Step 4: activity -->
-    <section class="step" data-step="4">
-      <p class="eyebrow">第四步</p>
+    <!-- Step 3: activity -->
+    <section class="step" data-step="3">
+      <p class="eyebrow">第三步</p>
       <h2 class="title">见面想干点什么？</h2>
       <p class="subtitle">随便选，越具体我准备得越充分</p>
       <div class="chip-wrap grid3" id="actChips" role="group" aria-label="想做的事"></div>
@@ -554,8 +535,8 @@
       </div>
     </section>
 
-    <!-- Step 5: reveal -->
-    <section class="step" data-step="5">
+    <!-- Step 4: reveal -->
+    <section class="step" data-step="4">
       <p class="eyebrow">暗号已生成</p>
       <h2 class="title">答案都给TA了</h2>
       <p class="subtitle">把这张卡片复制或截图发回去就好</p>
@@ -596,18 +577,10 @@
   }
 
   var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00", "你定就好"];
-  var AVAIL_OPTIONS = ["今晚就行", "明天", "这个周末", "工作日晚上", "周中下午", "深夜也没问题", "随缘", "你来定"];
   var REGIONS = [
-    { name: "外滩", vibe: "看江景吹风" },
-    { name: "陆家嘴", vibe: "高空约会" },
-    { name: "静安寺", vibe: "逛街方便" },
-    { name: "武康路", vibe: "梧桐区散步" },
-    { name: "安福路", vibe: "文艺小店多" },
-    { name: "前滩", vibe: "滨江新潮" },
-    { name: "新天地", vibe: "精致小资" },
-    { name: "五角场", vibe: "年轻又热闹" },
-    { name: "徐家汇", vibe: "老牌好逛" },
-    { name: "都可以", vibe: "你来定就好" }
+    { name: "静安", vibe: "商圈热闹好逛" },
+    { name: "徐汇", vibe: "老牌文艺好逛" },
+    { name: "长宁", vibe: "愚园路 慢生活" }
   ];
   var ACTS = [
     { e: "🍣", n: "日料" },
@@ -631,7 +604,6 @@
     step: 0,
     date: "",
     time: "",
-    avail: new Set(),
     regions: new Set(),
     acts: new Set()
   };
@@ -641,7 +613,7 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         date: state.date, time: state.time,
-        avail: [...state.avail], regions: [...state.regions], acts: [...state.acts]
+        regions: [...state.regions], acts: [...state.acts]
       }));
     } catch (e) {}
   }
@@ -652,7 +624,6 @@
       var d = JSON.parse(raw);
       state.date = d.date || "";
       state.time = d.time || "";
-      state.avail = new Set(d.avail || []);
       state.regions = new Set(d.regions || []);
       state.acts = new Set(d.acts || []);
     } catch (e) {}
@@ -733,26 +704,6 @@
   next1.addEventListener("click", function () { goTo(2); });
 
   // Step 2
-  var availChipsEl = document.getElementById("availChips");
-  var next2 = document.getElementById("next2");
-  AVAIL_OPTIONS.forEach(function (a) {
-    var c = document.createElement("button");
-    c.type = "button";
-    c.className = "chip";
-    c.textContent = a;
-    c.setAttribute("aria-pressed", "false");
-    c.addEventListener("click", function () {
-      var pressed = c.getAttribute("aria-pressed") === "true";
-      c.setAttribute("aria-pressed", String(!pressed));
-      if (pressed) state.avail.delete(a); else state.avail.add(a);
-      next2.disabled = state.avail.size === 0;
-      saveState();
-    });
-    availChipsEl.appendChild(c);
-  });
-  next2.addEventListener("click", function () { goTo(3); });
-
-  // Step 3
   var regionChipsEl = document.getElementById("regionChips");
   var next3 = document.getElementById("next3");
   REGIONS.forEach(function (r) {
@@ -770,7 +721,7 @@
     });
     regionChipsEl.appendChild(c);
   });
-  next3.addEventListener("click", function () { goTo(4); });
+  next3.addEventListener("click", function () { goTo(3); });
 
   // Step 4
   var actChipsEl = document.getElementById("actChips");
@@ -794,10 +745,10 @@
     renderRecap();
     spawnHearts();
     sendAnswerEmail(buildCopyText());
-    goTo(5);
+    goTo(4);
   });
 
-  // Step 5
+  // Step 4
   function formatDate(iso) {
     if (!iso) return "";
     var parts = iso.split("-");
@@ -813,7 +764,6 @@
     box.appendChild(heading);
     var rows = [
       { icon: "📅", label: "见面时间", value: formatDate(state.date) + " · " + state.time },
-      { icon: "🕰", label: "大概时段", value: [...state.avail].join(" / ") },
       { icon: "📍", label: "想去区域", value: [...state.regions].join(" / ") },
       { icon: "✨", label: "想做的事", value: [...state.acts].join(" / ") }
     ];
@@ -830,7 +780,6 @@
   function buildCopyText() {
     return "关于约会，我的答案 💌\n" +
       "📅 " + formatDate(state.date) + " · " + state.time + "\n" +
-      "🕰 " + [...state.avail].join("、") + "\n" +
       "📍 " + [...state.regions].join("、") + "\n" +
       "✨ " + [...state.acts].join("、") + "\n" +
       "剩下的，你安排就好 (｡･ω･｡)ﾉ";
@@ -903,12 +852,12 @@
 
   document.getElementById("resetBtn").addEventListener("click", function () {
     state.date = ""; state.time = "";
-    state.avail.clear(); state.regions.clear(); state.acts.clear();
+    state.regions.clear(); state.acts.clear();
     dateInput.value = "";
-    [timeChipsEl, availChipsEl, regionChipsEl, actChipsEl].forEach(function (wrap) {
+    [timeChipsEl, regionChipsEl, actChipsEl].forEach(function (wrap) {
       wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
     });
-    next1.disabled = true; next2.disabled = true; next3.disabled = true; next4.disabled = true;
+    next1.disabled = true; next3.disabled = true; next4.disabled = true;
     emailSent = false;
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     goTo(0);
