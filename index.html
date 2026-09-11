@@ -248,19 +248,56 @@
   }
   .mascot-wrap::before { width: 76px; height: 24px; left: 24px; top: 18px; }
   .mascot-wrap::after { width: 54px; height: 18px; right: 25px; top: 35px; }
-  .mascot {
-    width: 282px;
-    height: 176px;
+  .mascot-gallery {
+    width: 100%;
+    height: 100%;
     position: relative;
     z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     animation: bob 3.2s ease-in-out infinite;
+  }
+  .photo-panel {
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cat-panel { border-right: 2px dashed rgba(75,49,45,.22); }
+  .rabbit-panel { background: linear-gradient(180deg, rgba(255,240,194,.92), rgba(255,255,255,.72)); }
+  .photo-panel img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .cat-panel img { object-fit: cover; object-position: 48% center; }
+  .rabbit-panel img { object-fit: contain; padding: 9px 3px 3px; transform: scale(1.08); }
+  .pair-heart {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 49%;
+    transform: translate(-50%, -50%) rotate(-7deg);
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--line);
+    border-radius: 50%;
+    background: var(--pink);
+    color: white;
+    font-size: 20px;
+    line-height: 1;
+    box-shadow: 0 3px 0 rgba(75,49,45,.18);
   }
   @keyframes bob {
     0%, 100% { transform: translateY(0) rotate(-1.5deg); }
     50% { transform: translateY(-7px) rotate(1.5deg); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .mascot { animation: none; }
+    .mascot-gallery { animation: none; }
   }
 
   .step-heading {
@@ -277,9 +314,22 @@
     border-radius: 18px;
     background: var(--accent-soft);
     transform: rotate(3deg);
+    object-fit: cover;
+    object-position: center;
   }
-  .step-pal.rabbit { background: var(--cream); transform: rotate(-3deg); }
-  .step-pal.pair { width: 76px; height: 58px; background: linear-gradient(135deg, var(--accent-soft), var(--cream)); }
+  .step-pal.rabbit { background: var(--cream); transform: rotate(-3deg); object-fit: contain; padding: 1px; }
+  .step-pal.cat { background: var(--sky); object-position: 50% 45%; }
+  .step-pal.pair {
+    width: 76px;
+    height: 58px;
+    padding: 2px;
+    display: flex;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--accent-soft), var(--cream));
+  }
+  .step-pal.pair img { width: 50%; height: 100%; min-width: 0; }
+  .step-pal.pair .pair-cat-photo { object-fit: cover; object-position: center; border-radius: 13px 0 0 13px; }
+  .step-pal.pair .pair-rabbit-photo { object-fit: contain; border-radius: 0 13px 13px 0; }
 
   .center-block { text-align: center; }
 
@@ -497,44 +547,11 @@
     body { padding: 10px 10px 18px; }
     .card { padding: 16px 17px 18px; border-radius: 28px; }
     .mascot-wrap { height: 166px; }
-    .mascot { height: 163px; }
     .btn-row.inline { flex-direction: column; }
   }
 </style>
 </head>
 <body>
-
-<!-- Reusable, code-native mascots keep the whole experience in one portable HTML file. -->
-<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
-  <defs>
-    <symbol id="mascot-cat" viewBox="0 0 120 120">
-      <path d="M18 52L21 28C22 22 27 20 31 25L43 39C54 35 68 35 79 39L94 25C99 20 103 23 103 30L101 54C111 64 113 79 109 92C104 108 86 115 61 115C35 115 17 108 12 92C8 78 10 64 18 52Z" fill="var(--cat)" stroke="var(--line)" stroke-width="4.5" stroke-linejoin="round"/>
-      <path d="M20 53L22 30C23 24 27 23 31 28L43 42C56 36 70 37 80 42L95 27C99 23 101 26 101 32L99 55C88 63 74 65 60 59L51 48C43 57 30 60 20 53Z" fill="var(--cat-blue)" stroke="var(--line)" stroke-width="4.5" stroke-linejoin="round"/>
-      <path d="M31 71Q37 66 43 71" stroke="var(--line)" stroke-width="4" stroke-linecap="round" fill="none"/>
-      <path d="M75 70Q81 68 86 72" stroke="var(--line)" stroke-width="4" stroke-linecap="round" fill="none"/>
-      <ellipse cx="28" cy="84" rx="12" ry="7" fill="var(--pink)"/>
-      <ellipse cx="91" cy="84" rx="12" ry="7" fill="var(--pink)"/>
-      <path d="M27 81L24 87M33 80L31 87M39 81L38 87M80 81L78 87M86 80L84 87M92 81L91 87" stroke="var(--line)" stroke-width="2.3" stroke-linecap="round"/>
-      <path d="M53 78Q60 86 67 78M60 84V88" stroke="var(--line)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <path d="M53 89Q60 99 67 89Z" fill="var(--pink)" stroke="var(--line)" stroke-width="3.2" stroke-linejoin="round"/>
-      <path d="M18 101Q26 95 31 104M103 101Q95 95 90 104" stroke="var(--line)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
-    </symbol>
-    <symbol id="mascot-rabbit" viewBox="0 0 120 120">
-      <path d="M42 48C39 33 38 12 44 7C48 3 52 8 53 15L55 46" fill="var(--cream)" stroke="var(--line)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M66 46L67 15C68 8 73 4 77 8C83 14 80 35 78 50" fill="var(--cream)" stroke="var(--line)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M46 39C45 28 45 15 47 12M73 39C74 28 74 16 76 12" stroke="var(--pink)" stroke-width="5" stroke-linecap="round"/>
-      <path d="M60 39C86 39 104 54 108 77C112 100 93 114 61 115C28 115 9 103 12 78C15 55 34 39 60 39Z" fill="var(--cream)" stroke="var(--line)" stroke-width="4.5" stroke-linejoin="round"/>
-      <circle cx="42" cy="75" r="7" fill="var(--line)"/>
-      <circle cx="78" cy="75" r="7" fill="var(--line)"/>
-      <circle cx="44" cy="72" r="2.4" fill="white"/>
-      <circle cx="80" cy="72" r="2.4" fill="white"/>
-      <ellipse cx="25" cy="86" rx="10" ry="6.5" fill="var(--pink)"/>
-      <ellipse cx="95" cy="86" rx="10" ry="6.5" fill="var(--pink)"/>
-      <path d="M22 83L19 88M28 82L26 88M34 83L32 88M88 83L86 88M94 82L92 88M100 83L98 88" stroke="var(--line)" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M54 82Q60 89 66 82M60 88V94M60 94Q55 97 52 93M60 94Q65 98 68 93" stroke="var(--line)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    </symbol>
-  </defs>
-</svg>
 
 <div class="stage">
   <div class="card" id="card">
@@ -551,12 +568,11 @@
     <section class="step active" data-step="0">
       <div class="center-block">
         <div class="mascot-wrap">
-          <svg class="mascot" viewBox="0 0 300 190" xmlns="http://www.w3.org/2000/svg" aria-label="猫猫和兔兔">
-            <use href="#mascot-cat" x="4" y="43" width="142" height="142"/>
-            <use href="#mascot-rabbit" x="157" y="38" width="140" height="140"/>
-            <path d="M150 82C144 72 128 75 130 88C132 100 150 110 150 110C150 110 168 100 170 88C172 75 156 72 150 82Z" fill="var(--pink)" stroke="var(--line)" stroke-width="4"/>
-            <path d="M0 170Q42 149 83 169T166 168T250 168T320 164V195H0Z" fill="#bddd9f" opacity=".9"/>
-          </svg>
+          <div class="mascot-gallery" role="img" aria-label="猫猫和兔兔原图">
+            <div class="photo-panel cat-panel"><img src="assets/cat-original.png" alt="" /></div>
+            <div class="photo-panel rabbit-panel"><img src="assets/rabbit-original-cutout.png" alt="" /></div>
+            <span class="pair-heart" aria-hidden="true">♥</span>
+          </div>
         </div>
         <p class="eyebrow">一份软乎乎的邀请</p>
         <h2 class="title">可以约你出来玩吗？</h2>
@@ -577,7 +593,7 @@
           <h2 class="title">什么时候能见到你？</h2>
           <p class="subtitle">挑一个你方便的日子，具体时间也大致定一下</p>
         </div>
-        <svg class="step-pal rabbit" viewBox="0 0 120 120" aria-hidden="true"><use href="#mascot-rabbit"/></svg>
+        <img class="step-pal rabbit" src="assets/rabbit-original-cutout.png" alt="" aria-hidden="true" />
       </div>
 
       <div class="field-block">
@@ -607,7 +623,7 @@
           <h2 class="title">选一条约会路径</h2>
           <p class="subtitle">具体去哪先保密，选完当天见分晓</p>
         </div>
-        <svg class="step-pal" viewBox="0 0 120 120" aria-hidden="true"><use href="#mascot-cat"/></svg>
+        <img class="step-pal cat" src="assets/cat-original.png" alt="" aria-hidden="true" />
       </div>
       <div class="chip-wrap pair" id="routeChips" role="group" aria-label="约会路径"></div>
       <div class="btn-row">
@@ -623,10 +639,10 @@
           <h2 class="title">答案都给TA了</h2>
           <p class="subtitle">把这张卡片分享回去，接下来就等见面啦</p>
         </div>
-        <svg class="step-pal pair" viewBox="0 0 170 120" aria-hidden="true">
-          <use href="#mascot-cat" x="0" y="8" width="94" height="94"/>
-          <use href="#mascot-rabbit" x="76" y="6" width="92" height="92"/>
-        </svg>
+        <div class="step-pal pair" aria-hidden="true">
+          <img class="pair-cat-photo" src="assets/cat-original.png" alt="" />
+          <img class="pair-rabbit-photo" src="assets/rabbit-original-cutout.png" alt="" />
+        </div>
       </div>
 
       <div class="recap" id="recapBox"></div>
