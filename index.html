@@ -22,8 +22,10 @@
     --sky-strong: #78b9d3;
     --cream: #fff0c2;
     --cream-strong: #f5da91;
+    --yellow: #ffd96d;
     --pink: #f7acbb;
     --pink-strong: #ed7f99;
+    --peach: #f4a286;
     --grass: #bddd9f;
     --cat: #fffdf8;
     --cat-blue: #85abc7;
@@ -44,6 +46,7 @@
     background:
       radial-gradient(ellipse 90px 34px at 12% 12%, rgba(255,255,255,.9) 0 64%, transparent 66%),
       radial-gradient(ellipse 120px 42px at 88% 22%, rgba(255,255,255,.7) 0 64%, transparent 66%),
+      radial-gradient(circle at center, rgba(77,158,190,.12) 0 2px, transparent 2.5px) 0 0 / 42px 42px,
       linear-gradient(180deg, #c8edf7 0%, var(--paper) 68%, #dff2d2 100%);
     color: var(--ink);
     font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -94,6 +97,30 @@
     position: relative;
   }
 
+  .stage::before,
+  .stage::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 72px;
+    height: 30px;
+    border: 2px solid rgba(75,49,45,.22);
+    border-radius: 8px;
+    opacity: .7;
+  }
+  .stage::before {
+    left: -20px;
+    top: 54px;
+    background: rgba(255,217,109,.72);
+    transform: rotate(-14deg);
+  }
+  .stage::after {
+    right: -22px;
+    bottom: 52px;
+    background: rgba(247,172,187,.68);
+    transform: rotate(12deg);
+  }
+
   .card {
     background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,250,240,.98));
     border: 3px solid var(--line);
@@ -105,6 +132,26 @@
     min-height: min(650px, calc(100dvh - 46px));
     display: flex;
     flex-direction: column;
+    transition: box-shadow .3s ease;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 9px;
+    border-bottom: 2px solid var(--line);
+    background: linear-gradient(90deg, var(--sky-strong) 0 50%, var(--yellow) 50% 100%);
+    transition: background .3s ease;
+  }
+  .card[data-current-step="1"]::before { background: linear-gradient(90deg, var(--cream-strong), var(--yellow)); }
+  .card[data-current-step="2"]::before { background: linear-gradient(90deg, var(--cat-blue), var(--sky)); }
+  .card[data-current-step="3"]::before { background: linear-gradient(90deg, var(--pink), var(--peach)); }
+  .card > :not(.deco-hearts):not(.hearts-fx) {
+    position: relative;
+    z-index: 1;
   }
 
   .deco-hearts {
@@ -155,14 +202,22 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--accent-soft);
-    transition: background .25s, transform .25s;
+    background: var(--dot-pale);
+    border: 1px solid var(--dot-color);
+    opacity: .58;
+    transition: background .25s, transform .25s, border-radius .25s;
   }
+  .dots span:nth-child(1) { --dot-color: var(--pink-strong); --dot-pale: #fbd9e1; }
+  .dots span:nth-child(2) { --dot-color: var(--yellow); --dot-pale: #fff0bd; }
+  .dots span:nth-child(3) { --dot-color: var(--sky-strong); --dot-pale: #d8f0f7; }
+  .dots span:nth-child(4) { --dot-color: #8fc779; --dot-pale: #dff1d6; }
   .dots span.active {
-    background: var(--pink-strong);
-    transform: scale(1.3);
+    background: var(--dot-color);
+    border-radius: 3px;
+    transform: scale(1.35) rotate(45deg);
+    opacity: 1;
   }
-  .dots span.done { background: var(--sky-strong); }
+  .dots span.done { background: var(--dot-color); opacity: .86; }
 
   .spacer32 { width: 32px; }
 
@@ -180,8 +235,8 @@
     padding: 5px 11px;
     border: 2px solid var(--line);
     border-radius: 999px;
-    background: var(--cream);
-    box-shadow: 0 2px 0 rgba(75,49,45,.18);
+    background: linear-gradient(105deg, var(--accent-soft) 0 46%, var(--cream) 54% 100%);
+    box-shadow: 0 3px 0 rgba(75,49,45,.18), 0 6px 14px rgba(75,49,45,.08);
   }
   .brand .heart { font-size: 12px; color: var(--pink-strong); }
 
@@ -235,16 +290,19 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-  }
     position: relative;
-    box-shadow: inset 0 -5px 0 rgba(75,49,45,.06);
+    box-shadow:
+      0 0 0 5px var(--surface-strong),
+      0 0 0 7px rgba(120,185,211,.58),
+      0 8px 0 rgba(75,49,45,.14);
+    animation: bob 3.2s ease-in-out infinite;
+    transform-origin: center;
   }
   .mascot-gallery {
     width: 100%;
     height: 100%;
     position: relative;
     z-index: 1;
-    animation: bob 3.2s ease-in-out infinite;
   }
   .main-photo {
     width: 100%;
@@ -253,11 +311,11 @@
     object-fit: contain;
   }
   @keyframes bob {
-    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
-    50% { transform: translateY(-7px) rotate(1.5deg); }
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-6px) rotate(1deg); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .mascot-gallery { animation: none; }
+    .mascot-wrap { animation: none; }
   }
 
   .step-heading {
@@ -276,6 +334,7 @@
     transform: rotate(3deg);
     object-fit: cover;
     object-position: center;
+    box-shadow: 0 0 0 3px white, 0 3px 0 rgba(75,49,45,.16);
   }
   .step-pal.rabbit { background: var(--cream); transform: rotate(-3deg); object-fit: contain; padding: 1px; }
   .step-pal.cat { background: var(--sky); object-position: 50% 45%; }
@@ -312,17 +371,26 @@
     border: 2.5px solid var(--line);
     transition: transform .12s ease, box-shadow .12s ease, background .2s;
     -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
   }
   button.btn:active { transform: translateY(2px); }
   button.btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
   .btn-primary {
-    background: var(--pink);
+    background: linear-gradient(180deg, #ffc0cd 0%, var(--pink) 100%);
     color: var(--ink);
     box-shadow: var(--shadow-2);
     flex: 1;
   }
-  .btn-primary:hover { background: var(--pink-strong); }
+  .btn-primary::before {
+    content: "✦";
+    display: inline-block;
+    margin-right: 7px;
+    color: #fff8dc;
+    text-shadow: 0 1px 0 rgba(75,49,45,.25);
+  }
+  .btn-primary:hover { background: linear-gradient(180deg, #f9adbd, var(--pink-strong)); }
   .btn-primary:disabled {
     opacity: .45;
     cursor: not-allowed;
@@ -330,7 +398,7 @@
   }
 
   .btn-ghost {
-    background: var(--surface-strong);
+    background: linear-gradient(180deg, var(--surface-strong), #f5fbfd);
     color: var(--ink-soft);
     border-color: var(--muted);
     flex: 1;
@@ -396,6 +464,7 @@
     text-align: center;
     transition: background .15s, border-color .15s, transform .1s;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 0 rgba(75,49,45,.1);
   }
   .chip:active { transform: scale(.97); }
   .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
@@ -418,6 +487,8 @@
     gap: 4px;
     padding: 22px 12px;
   }
+  .route-card:nth-child(1) { background: linear-gradient(145deg, var(--accent-wash), #fff); }
+  .route-card:nth-child(2) { background: linear-gradient(145deg, #fff9e4, #fff); }
   .route-card::after {
     content: "♡";
     position: absolute;
@@ -448,6 +519,20 @@
     padding: 16px 16px 14px;
     margin-bottom: 16px;
     font-variant-numeric: tabular-nums;
+    position: relative;
+    box-shadow: 0 4px 0 rgba(120,185,211,.16);
+  }
+  .recap::before {
+    content: "";
+    position: absolute;
+    width: 72px;
+    height: 17px;
+    left: 50%;
+    top: -10px;
+    transform: translateX(-50%) rotate(-2deg);
+    background: rgba(247,172,187,.58);
+    border-left: 1px dashed rgba(75,49,45,.2);
+    border-right: 1px dashed rgba(75,49,45,.2);
   }
   .recap-heading {
     font-family: 'ZCOOL KuaiLe', 'PingFang SC', sans-serif;
@@ -508,6 +593,7 @@
     .card { padding: 16px 17px 18px; border-radius: 28px; }
     .mascot-wrap { width: 214px; height: 214px; }
     .btn-row.inline { flex-direction: column; }
+    .stage::before, .stage::after { display: none; }
   }
 </style>
 </head>
@@ -679,6 +765,7 @@
   var steps = document.querySelectorAll(".step");
   var dotsEl = document.getElementById("dots");
   var backBtn = document.getElementById("backBtn");
+  var cardEl = document.getElementById("card");
   var TOTAL = steps.length;
 
   for (var i = 0; i < TOTAL; i++) {
@@ -695,6 +782,7 @@
 
   function goTo(n) {
     state.step = n;
+    cardEl.setAttribute("data-current-step", String(n));
     for (var i = 0; i < steps.length; i++) {
       steps[i].classList.toggle("active", parseInt(steps[i].dataset.step, 10) === n);
     }
