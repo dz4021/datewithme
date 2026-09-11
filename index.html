@@ -320,7 +320,6 @@
     gap: 9px;
   }
   .chip-wrap.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .chip-wrap.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
 
   .chip {
     font-family: 'Noto Sans SC', sans-serif;
@@ -343,14 +342,20 @@
     border-color: var(--accent);
     font-weight: 700;
   }
-  .chip[aria-pressed="true"]:not(.route-card):not(.act-card)::before { content: "♥ "; }
+  .chip[aria-pressed="true"]:not(.route-card)::before { content: "♥ "; }
 
   .chip-time { flex: 1 1 30%; }
 
-  .route-card, .act-card {
+  .route-card {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    padding: 22px 12px;
   }
-  .route-card::after, .act-card::after {
+  .route-card::after {
     content: "♥";
     position: absolute;
     top: 6px;
@@ -361,30 +366,14 @@
     transform: scale(.5);
     transition: opacity .15s, transform .15s;
   }
-  .route-card[aria-pressed="true"]::after, .act-card[aria-pressed="true"]::after {
+  .route-card[aria-pressed="true"]::after {
     opacity: 1;
     transform: scale(1);
-  }
-
-  .route-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 4px;
-    padding: 22px 12px;
   }
   .route-emoji { font-size: 26px; }
   .route-card .r-name { font-size: 15px; font-weight: 700; }
   .route-card .r-vibe { font-size: 11.5px; color: var(--muted); font-weight: 400; line-height: 1.4; }
   .route-card[aria-pressed="true"] .r-vibe { color: var(--accent-strong); }
-
-  .act-card {
-    padding: 12px 6px;
-    font-size: 12.5px;
-    line-height: 1.5;
-  }
-  .act-emoji { font-size: 21px; display: block; margin-bottom: 3px; }
 
   .recap {
     display: flex;
@@ -522,23 +511,12 @@
       <p class="subtitle">具体去哪先保密，选完当天见分晓</p>
       <div class="chip-wrap pair" id="routeChips" role="group" aria-label="约会路径"></div>
       <div class="btn-row">
-        <button class="btn btn-primary" id="next3" type="button" disabled>继续 →</button>
+        <button class="btn btn-primary" id="next3" type="button" disabled>生成答案 →</button>
       </div>
     </section>
 
-    <!-- Step 3: activity -->
+    <!-- Step 3: reveal -->
     <section class="step" data-step="3">
-      <p class="eyebrow">第三步</p>
-      <h2 class="title">见面想干点什么？</h2>
-      <p class="subtitle">随便选，越具体我准备得越充分</p>
-      <div class="chip-wrap grid3" id="actChips" role="group" aria-label="想做的事"></div>
-      <div class="btn-row">
-        <button class="btn btn-primary" id="next4" type="button" disabled>生成答案 →</button>
-      </div>
-    </section>
-
-    <!-- Step 4: reveal -->
-    <section class="step" data-step="4">
       <p class="eyebrow">暗号已生成</p>
       <h2 class="title">答案都给TA了</h2>
       <p class="subtitle">把这张卡片复制或截图发回去就好</p>
@@ -578,21 +556,10 @@
       });
   }
 
-  var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00", "你定就好"];
+  var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00"];
   var ROUTES = [
-    { e: "🎲", name: "约会路径 1", vibe: "神秘惊喜，交给我安排" },
-    { e: "🔮", name: "约会路径 2", vibe: "另一种玩法，一样用心" }
-  ];
-  var ACTS = [
-    { e: "🍣", n: "日料" },
-    { e: "🔥", n: "火锅" },
-    { e: "🍢", n: "烧烤" },
-    { e: "☕", n: "咖啡厅" },
-    { e: "🎬", n: "看电影" },
-    { e: "🖼", n: "看展" },
-    { e: "🍸", n: "小酒馆" },
-    { e: "🚶", n: "压马路" },
-    { e: "🍰", n: "甜品" }
+    { e: "🎲", name: "约会路径 1", vibe: "开盲盒，惊喜不解释" },
+    { e: "🔮", name: "约会路径 2", vibe: "抽个签，玄学但用心" }
   ];
   var TEASE_LINES = [
     "才怪，明明超期待 (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
@@ -605,16 +572,14 @@
     step: 0,
     date: "",
     time: "",
-    route: "",
-    acts: new Set()
+    route: ""
   };
 
   var STORAGE_KEY = "date-signal-state-v1";
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        date: state.date, time: state.time,
-        route: state.route, acts: [...state.acts]
+        date: state.date, time: state.time, route: state.route
       }));
     } catch (e) {}
   }
@@ -626,7 +591,6 @@
       state.date = d.date || "";
       state.time = d.time || "";
       state.route = d.route || "";
-      state.acts = new Set(d.acts || []);
     } catch (e) {}
   }
 
@@ -723,34 +687,14 @@
     });
     routeChipsEl.appendChild(c);
   });
-  next3.addEventListener("click", function () { goTo(3); });
-
-  // Step 4
-  var actChipsEl = document.getElementById("actChips");
-  var next4 = document.getElementById("next4");
-  ACTS.forEach(function (a) {
-    var c = document.createElement("button");
-    c.type = "button";
-    c.className = "chip act-card";
-    c.setAttribute("aria-pressed", "false");
-    c.innerHTML = '<span class="act-emoji">' + a.e + '</span>' + a.n;
-    c.addEventListener("click", function () {
-      var pressed = c.getAttribute("aria-pressed") === "true";
-      c.setAttribute("aria-pressed", String(!pressed));
-      if (pressed) state.acts.delete(a.n); else state.acts.add(a.n);
-      next4.disabled = state.acts.size === 0;
-      saveState();
-    });
-    actChipsEl.appendChild(c);
-  });
-  next4.addEventListener("click", function () {
+  next3.addEventListener("click", function () {
     renderRecap();
     spawnHearts();
     sendAnswerEmail(buildCopyText());
-    goTo(4);
+    goTo(3);
   });
 
-  // Step 4
+  // Step 3
   function formatDate(iso) {
     if (!iso) return "";
     var parts = iso.split("-");
@@ -766,8 +710,7 @@
     box.appendChild(heading);
     var rows = [
       { icon: "📅", label: "见面时间", value: formatDate(state.date) + " · " + state.time },
-      { icon: "🗺", label: "选的路径", value: state.route },
-      { icon: "✨", label: "想做的事", value: [...state.acts].join(" / ") }
+      { icon: "🗺", label: "选的路径", value: state.route }
     ];
     rows.forEach(function (r) {
       var row = document.createElement("div");
@@ -783,7 +726,6 @@
     return "关于约会，我的答案 💌\n" +
       "📅 " + formatDate(state.date) + " · " + state.time + "\n" +
       "🗺 " + state.route + "\n" +
-      "✨ " + [...state.acts].join("、") + "\n" +
       "剩下的，你安排就好 (｡･ω･｡)ﾉ";
   }
 
@@ -854,12 +796,11 @@
 
   document.getElementById("resetBtn").addEventListener("click", function () {
     state.date = ""; state.time = ""; state.route = "";
-    state.acts.clear();
     dateInput.value = "";
-    [timeChipsEl, routeChipsEl, actChipsEl].forEach(function (wrap) {
+    [timeChipsEl, routeChipsEl].forEach(function (wrap) {
       wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
     });
-    next1.disabled = true; next3.disabled = true; next4.disabled = true;
+    next1.disabled = true; next3.disabled = true;
     emailSent = false;
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     goTo(0);
