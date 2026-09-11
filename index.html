@@ -411,6 +411,13 @@
     margin-bottom: 16px;
     font-variant-numeric: tabular-nums;
   }
+  .recap-heading {
+    font-family: 'ZCOOL KuaiLe', 'PingFang SC', sans-serif;
+    font-size: 15px;
+    color: var(--accent-strong);
+    text-align: center;
+    margin-bottom: 2px;
+  }
   .recap-row { display: flex; gap: 10px; align-items: flex-start; }
   .recap-icon { font-size: 16px; line-height: 1.4; }
   .recap-label { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: .04em; }
@@ -574,8 +581,29 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 (function () {
+  var EMAILJS_PUBLIC_KEY = "yBE1KL4GmfsLFv1xl";
+  var EMAILJS_SERVICE_ID = "service_53jwups";
+  var EMAILJS_TEMPLATE_ID = "template_4gw6nxc";
+  var emailSent = false;
+
+  if (window.emailjs) {
+    try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch (e) {}
+  }
+
+  function sendAnswerEmail(text) {
+    if (emailSent || !window.emailjs) return;
+    emailSent = true;
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { message: text })
+      .catch(function (err) {
+        // Silent by design — she never sees this. Left in console for debugging.
+        console.error("emailjs send failed", err);
+      });
+  }
+
   var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00", "你定就好"];
   var AVAIL_OPTIONS = ["今晚就行", "明天", "这个周末", "工作日晚上", "周中下午", "深夜也没问题", "随缘", "你来定"];
   var REGIONS = [
@@ -774,6 +802,7 @@
   next4.addEventListener("click", function () {
     renderRecap();
     spawnHearts();
+    sendAnswerEmail(buildCopyText());
     goTo(5);
   });
 
@@ -787,6 +816,10 @@
   function renderRecap() {
     var box = document.getElementById("recapBox");
     box.innerHTML = "";
+    var heading = document.createElement("div");
+    heading.className = "recap-heading";
+    heading.textContent = "💌 DateWithMe · 答案卡";
+    box.appendChild(heading);
     var rows = [
       { icon: "📅", label: "见面时间", value: formatDate(state.date) + " · " + state.time },
       { icon: "🕰", label: "大概时段", value: [...state.avail].join(" / ") },
@@ -818,7 +851,7 @@
   var canShare = !!(navigator.share);
   if (canShare) {
     copyBtn.textContent = "分享给TA";
-    shareHint.textContent = "点上面按钮直接唤起微信 / 短信分享，一步发送";
+    shareHint.textContent = "点上面按钮生成图片卡片，直接唤起微信 / 短信分享";
   } else {
     copyBtn.textContent = "复制文案";
     shareHint.textContent = "长按 / 截图这张卡片，效果一样浪漫 (｡•ᴗ•｡)";
@@ -842,8 +875,7 @@
     }
   }
 
-  copyBtn.addEventListener("click", function () {
-    var text = buildCopyText();
+  function shareTextOnly(text) {
     if (canShare) {
       navigator.share({ title: "关于约会，我的答案", text: text }).catch(function (err) {
         // AbortError = she cancelled the share sheet herself, nothing to do
@@ -852,6 +884,30 @@
     } else {
       fallbackCopy(text);
     }
+  }
+
+  copyBtn.addEventListener("click", function () {
+    var text = buildCopyText();
+    var target = document.getElementById("recapBox");
+
+    if (!window.html2canvas) { shareTextOnly(text); return; }
+
+    html2canvas(target, { backgroundColor: null, scale: 2 }).then(function (canvas) {
+      canvas.toBlob(function (blob) {
+        if (!blob) { shareTextOnly(text); return; }
+        var file = new File([blob], "date-answer.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: "关于约会，我的答案", text: text })
+            .catch(function (err) {
+              if (err && err.name !== "AbortError") shareTextOnly(text);
+            });
+        } else {
+          shareTextOnly(text);
+        }
+      }, "image/png");
+    }).catch(function () {
+      shareTextOnly(text);
+    });
   });
 
   document.getElementById("resetBtn").addEventListener("click", function () {
@@ -862,6 +918,7 @@
       wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
     });
     next1.disabled = true; next2.disabled = true; next3.disabled = true; next4.disabled = true;
+    emailSent = false;
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     goTo(0);
   });
