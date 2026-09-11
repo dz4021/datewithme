@@ -1,0 +1,891 @@
+<title>DateWithMe</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+
+  :root {
+    --paper: #fff0f5;
+    --paper-2: #ffe1ec;
+    --surface: #fffafc;
+    --ink: #5c1f3a;
+    --ink-soft: #96496b;
+    --muted: #c98aa4;
+    --line: #ffb3cb;
+    --accent: #ff5c93;
+    --accent-strong: #e63d78;
+    --accent-soft: #ffd9e6;
+    --accent-wash: #fff2f7;
+    --chip-bg: #ffffff;
+    --heart-tex: #ffc9dc;
+    --shadow-1: 0 26px 50px -20px rgba(230, 61, 120, 0.35);
+    --shadow-2: 0 8px 20px -8px rgba(230, 61, 120, 0.55);
+    --focus: #e63d78;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #2a1420;
+      --paper-2: #341726;
+      --surface: #3a1a2a;
+      --ink: #ffe3ee;
+      --ink-soft: #f0b6cc;
+      --muted: #c1849f;
+      --line: #ff8fb3;
+      --accent: #ff6fa0;
+      --accent-strong: #ff9dbe;
+      --accent-soft: #532438;
+      --accent-wash: #3a1a2a;
+      --chip-bg: #452032;
+      --heart-tex: #4d2436;
+      --shadow-1: 0 26px 50px -18px rgba(255, 111, 160, 0.4);
+      --shadow-2: 0 8px 20px -8px rgba(255, 111, 160, 0.5);
+      --focus: #ff9dbe;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #2a1420;
+    --paper-2: #341726;
+    --surface: #3a1a2a;
+    --ink: #ffe3ee;
+    --ink-soft: #f0b6cc;
+    --muted: #c1849f;
+    --line: #ff8fb3;
+    --accent: #ff6fa0;
+    --accent-strong: #ff9dbe;
+    --accent-soft: #532438;
+    --accent-wash: #3a1a2a;
+    --chip-bg: #452032;
+    --heart-tex: #4d2436;
+    --shadow-1: 0 26px 50px -18px rgba(255, 111, 160, 0.4);
+    --shadow-2: 0 8px 20px -8px rgba(255, 111, 160, 0.5);
+    --focus: #ff9dbe;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: linear-gradient(160deg, var(--paper) 0%, var(--paper-2) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px 40px;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='64' viewBox='0 0 72 64'%3E%3Cpath d='M18 12C13 4 2 6 2 16c0 10 16 20 16 20s16-10 16-20C34 6 23 4 18 12Z' fill='%23ffb3cb' fill-opacity='.35'/%3E%3Cpath d='M56 34c-4-6-12-4-12 3s12 15 12 15 12-8 12-15-8-9-12-3Z' fill='%23ffb3cb' fill-opacity='.28'/%3E%3C/svg%3E");
+    background-size: 220px 196px;
+    background-repeat: repeat;
+    z-index: 0;
+  }
+
+  h1, h2, .display {
+    font-family: 'ZCOOL KuaiLe', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  .stage {
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: 32px;
+    box-shadow: var(--shadow-1);
+    padding: 26px 22px 22px;
+    position: relative;
+    overflow: hidden;
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    min-height: 32px;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--ink);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    margin-left: -8px;
+    border-radius: 10px;
+    line-height: 1;
+    visibility: hidden;
+  }
+  .back-btn.show { visibility: visible; }
+  .back-btn:hover { background: var(--accent-wash); }
+  .back-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .dots {
+    display: flex;
+    gap: 6px;
+    margin: 0 auto;
+  }
+  .dots span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    transition: background .25s, transform .25s;
+  }
+  .dots span.active {
+    background: var(--accent);
+    transform: scale(1.3);
+  }
+  .dots span.done { background: var(--accent-strong); }
+
+  .spacer32 { width: 32px; }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: 'ZCOOL KuaiLe', 'PingFang SC', sans-serif;
+    font-size: 15px;
+    letter-spacing: .02em;
+    color: var(--accent-strong);
+    margin-bottom: 14px;
+  }
+  .brand .heart { font-size: 12px; }
+
+  .step {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    animation: stepIn .38s ease both;
+  }
+  .step.active { display: flex; }
+
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .step { animation: none; }
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: .12em;
+    color: var(--accent-strong);
+    font-weight: 700;
+    margin: 0 0 6px;
+    text-transform: uppercase;
+  }
+
+  h2.title {
+    font-size: clamp(22px, 6vw, 27px);
+    margin: 0 0 8px;
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 20px;
+    line-height: 1.6;
+  }
+
+  .mascot-wrap {
+    background: radial-gradient(circle at 32% 28%, var(--accent-wash), var(--accent-soft));
+    border: 1.5px solid var(--line);
+    border-radius: 26px;
+    width: 168px;
+    height: 168px;
+    margin: 4px auto 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .mascot {
+    width: 118px;
+    height: 118px;
+    animation: bob 3.2s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50% { transform: translateY(-7px) rotate(1.5deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mascot { animation: none; }
+  }
+
+  .center-block { text-align: center; }
+
+  .btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 18px;
+  }
+  .btn-row.inline { flex-direction: row; }
+
+  button.btn {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: 1.5px solid var(--line);
+    transition: transform .12s ease, box-shadow .12s ease, background .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button.btn:active { transform: translateY(2px); }
+  button.btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: var(--shadow-2);
+    flex: 1;
+  }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-primary:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    box-shadow: none;
+    filter: none;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    border-color: var(--line);
+    flex: 1;
+  }
+  .btn-ghost:hover { background: var(--accent-wash); color: var(--ink); }
+
+  .teaser {
+    font-size: 12.5px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 10px;
+    min-height: 16px;
+    transition: opacity .2s;
+  }
+  .teaser.shake { animation: shake .38s; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  fieldset { border: none; margin: 0; padding: 0; }
+  legend {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+    padding: 0;
+  }
+
+  .field-block + .field-block { margin-top: 22px; }
+
+  input[type="date"] {
+    width: 100%;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--chip-bg);
+    border: 1.5px solid var(--line);
+    border-radius: 16px;
+    padding: 13px 14px;
+  }
+  input[type="date"]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .chip-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+  }
+  .chip-wrap.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .chip-wrap.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+
+  .chip {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--chip-bg);
+    border: 1.5px solid var(--line);
+    color: var(--ink);
+    border-radius: 14px;
+    padding: 10px 13px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: background .15s, border-color .15s, transform .1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .chip:active { transform: scale(.97); }
+  .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .chip[aria-pressed="true"] {
+    background: linear-gradient(135deg, var(--accent-soft), var(--accent-wash));
+    border-color: var(--accent);
+    color: var(--accent-strong);
+    font-weight: 700;
+    box-shadow: 0 4px 12px -6px rgba(230, 61, 120, 0.5);
+  }
+  .chip[aria-pressed="true"]:not(.region-card):not(.act-card)::before { content: "♥ "; }
+
+  .chip-time { flex: 1 1 30%; }
+
+  .region-card, .act-card {
+    position: relative;
+  }
+  .region-card::after, .act-card::after {
+    content: "♥";
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 11px;
+    color: var(--accent);
+    opacity: 0;
+    transform: scale(.5);
+    transition: opacity .15s, transform .15s;
+  }
+  .region-card[aria-pressed="true"]::after, .act-card[aria-pressed="true"]::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .region-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 12px 13px;
+  }
+  .region-card .r-name { font-size: 14.5px; font-weight: 700; }
+  .region-card .r-vibe { font-size: 11.5px; color: var(--muted); font-weight: 400; }
+  .region-card[aria-pressed="true"] .r-vibe { color: var(--accent-strong); }
+
+  .act-card {
+    padding: 12px 6px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .act-emoji { font-size: 21px; display: block; margin-bottom: 3px; }
+
+  .scroll-area {
+    overflow-y: auto;
+    padding-right: 2px;
+    margin-right: -2px;
+  }
+
+  .recap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--accent-wash);
+    border: 2.5px dashed var(--accent);
+    border-radius: 20px;
+    padding: 16px 16px 14px;
+    margin-bottom: 16px;
+    font-variant-numeric: tabular-nums;
+  }
+  .recap-row { display: flex; gap: 10px; align-items: flex-start; }
+  .recap-icon { font-size: 16px; line-height: 1.4; }
+  .recap-label { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: .04em; }
+  .recap-value { font-size: 14px; color: var(--ink); font-weight: 500; line-height: 1.5; }
+
+  .copy-feedback {
+    font-size: 12.5px;
+    color: var(--accent-strong);
+    text-align: center;
+    font-weight: 700;
+    height: 16px;
+    margin-top: 8px;
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .copy-feedback.show { opacity: 1; }
+
+  .hearts-fx {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 30px;
+  }
+  .hearts-fx span {
+    position: absolute;
+    bottom: -20px;
+    font-size: 16px;
+    opacity: 0;
+    animation: rise 2.6s ease-in forwards;
+  }
+  @keyframes rise {
+    0% { opacity: 0; transform: translateY(0) scale(.6); }
+    15% { opacity: .9; }
+    100% { opacity: 0; transform: translateY(-420px) scale(1.1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hearts-fx { display: none; }
+  }
+
+  .footnote {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 14px;
+  }
+</style>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="hearts-fx" id="heartsFx" aria-hidden="true"></div>
+    <div class="brand"><span class="heart">💌</span>DateWithMe</div>
+    <div class="topbar">
+      <button class="back-btn" id="backBtn" aria-label="上一步" type="button">←</button>
+      <div class="dots" id="dots"></div>
+      <div class="spacer32"></div>
+    </div>
+
+    <!-- Step 0: invite -->
+    <section class="step active" data-step="0">
+      <div class="center-block">
+        <div class="mascot-wrap">
+          <svg class="mascot" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="70" cy="82" rx="52" ry="44" fill="var(--surface)" stroke="var(--line)" stroke-width="3"/>
+            <ellipse cx="27" cy="88" rx="14" ry="20" fill="var(--surface)" stroke="var(--line)" stroke-width="3" transform="rotate(-18 27 88)"/>
+            <ellipse cx="113" cy="88" rx="14" ry="20" fill="var(--surface)" stroke="var(--line)" stroke-width="3" transform="rotate(18 113 88)"/>
+            <circle cx="53" cy="72" r="4.2" fill="var(--ink-soft)"/>
+            <circle cx="87" cy="72" r="4.2" fill="var(--ink-soft)"/>
+            <ellipse cx="46" cy="86" rx="8" ry="5" fill="var(--accent-soft)"/>
+            <ellipse cx="94" cy="86" rx="8" ry="5" fill="var(--accent-soft)"/>
+            <path d="M62 90 Q70 96 78 90" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M70 58C64 48 48 50 48 64C48 76 70 92 70 92C70 92 92 76 92 64C92 50 76 48 70 58Z" fill="var(--accent)" stroke="var(--ink-soft)" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <p class="eyebrow">来自TA的暗号</p>
+        <h2 class="title">可以约你出来玩吗？</h2>
+        <p class="subtitle">装作云淡风轻发出去，其实已经等你回复很久了</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="acceptBtn" type="button">愿意呀 ♥</button>
+        <button class="btn btn-ghost" id="teaseBtn" type="button">才没有很想</button>
+      </div>
+      <p class="teaser" id="teaserText"></p>
+    </section>
+
+    <!-- Step 1: date + time -->
+    <section class="step" data-step="1">
+      <p class="eyebrow">第一步</p>
+      <h2 class="title">什么时候能见到你？</h2>
+      <p class="subtitle">挑一个你方便的日子，具体时间也大致定一下</p>
+
+      <div class="field-block">
+        <fieldset>
+          <legend>见面日期</legend>
+          <input type="date" id="dateInput" />
+        </fieldset>
+      </div>
+
+      <div class="field-block">
+        <fieldset>
+          <legend>大概几点</legend>
+          <div class="chip-wrap" id="timeChips" role="group" aria-label="见面时间"></div>
+        </fieldset>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="next1" type="button" disabled>继续 →</button>
+      </div>
+    </section>
+
+    <!-- Step 2: general availability tags -->
+    <section class="step" data-step="2">
+      <p class="eyebrow">第二步</p>
+      <h2 class="title">大概是这样的时段？</h2>
+      <p class="subtitle">可以多选，选得越多我越安心</p>
+      <div class="chip-wrap" id="availChips" role="group" aria-label="方便的时段"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="next2" type="button" disabled>继续 →</button>
+      </div>
+    </section>
+
+    <!-- Step 3: Shanghai regions -->
+    <section class="step" data-step="3">
+      <p class="eyebrow">第三步 · 上海</p>
+      <h2 class="title">想在哪一片见面？</h2>
+      <p class="subtitle">选你顺路或喜欢的区域，可以多选</p>
+      <div class="scroll-area" style="max-height: 300px;">
+        <div class="chip-wrap grid2" id="regionChips" role="group" aria-label="上海区域"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="next3" type="button" disabled>继续 →</button>
+      </div>
+    </section>
+
+    <!-- Step 4: activity -->
+    <section class="step" data-step="4">
+      <p class="eyebrow">第四步</p>
+      <h2 class="title">见面想干点什么？</h2>
+      <p class="subtitle">随便选，越具体我准备得越充分</p>
+      <div class="chip-wrap grid3" id="actChips" role="group" aria-label="想做的事"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="next4" type="button" disabled>生成答案 →</button>
+      </div>
+    </section>
+
+    <!-- Step 5: reveal -->
+    <section class="step" data-step="5">
+      <p class="eyebrow">暗号已生成</p>
+      <h2 class="title">答案都给TA了</h2>
+      <p class="subtitle">把这张卡片复制或截图发回去就好</p>
+
+      <div class="recap" id="recapBox"></div>
+
+      <div class="btn-row inline">
+        <button class="btn btn-primary" id="copyBtn" type="button">分享给TA</button>
+        <button class="btn btn-ghost" id="resetBtn" type="button">重新选一次</button>
+      </div>
+      <p class="copy-feedback" id="copyFeedback">已复制到剪贴板 ✓</p>
+      <p class="footnote" id="shareHint">长按 / 截图这张卡片，效果一样浪漫 (｡•ᴗ•｡)</p>
+    </section>
+  </div>
+</div>
+
+<script>
+(function () {
+  var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00", "你定就好"];
+  var AVAIL_OPTIONS = ["今晚就行", "明天", "这个周末", "工作日晚上", "周中下午", "深夜也没问题", "随缘", "你来定"];
+  var REGIONS = [
+    { name: "外滩", vibe: "看江景吹风" },
+    { name: "陆家嘴", vibe: "高空约会" },
+    { name: "静安寺", vibe: "逛街方便" },
+    { name: "武康路", vibe: "梧桐区散步" },
+    { name: "安福路", vibe: "文艺小店多" },
+    { name: "前滩", vibe: "滨江新潮" },
+    { name: "新天地", vibe: "精致小资" },
+    { name: "五角场", vibe: "年轻又热闹" },
+    { name: "徐家汇", vibe: "老牌好逛" },
+    { name: "都可以", vibe: "你来定就好" }
+  ];
+  var ACTS = [
+    { e: "🍣", n: "日料" },
+    { e: "🔥", n: "火锅" },
+    { e: "🍢", n: "烧烤" },
+    { e: "☕", n: "咖啡厅" },
+    { e: "🎬", n: "看电影" },
+    { e: "🖼", n: "看展" },
+    { e: "🍸", n: "小酒馆" },
+    { e: "🚶", n: "压马路" },
+    { e: "🍰", n: "甜品" }
+  ];
+  var TEASE_LINES = [
+    "才怪，明明超期待 (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
+    "骗不了我的，快选愿意啦",
+    "嘴上说不要，手指已经点过来了",
+    "再装也没用哦，愿意吧～"
+  ];
+
+  var state = {
+    step: 0,
+    date: "",
+    time: "",
+    avail: new Set(),
+    regions: new Set(),
+    acts: new Set()
+  };
+
+  var STORAGE_KEY = "date-signal-state-v1";
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        date: state.date, time: state.time,
+        avail: [...state.avail], regions: [...state.regions], acts: [...state.acts]
+      }));
+    } catch (e) {}
+  }
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var d = JSON.parse(raw);
+      state.date = d.date || "";
+      state.time = d.time || "";
+      state.avail = new Set(d.avail || []);
+      state.regions = new Set(d.regions || []);
+      state.acts = new Set(d.acts || []);
+    } catch (e) {}
+  }
+
+  var steps = document.querySelectorAll(".step");
+  var dotsEl = document.getElementById("dots");
+  var backBtn = document.getElementById("backBtn");
+  var TOTAL = steps.length;
+
+  for (var i = 0; i < TOTAL; i++) {
+    var d = document.createElement("span");
+    dotsEl.appendChild(d);
+  }
+
+  function renderDots() {
+    var dots = dotsEl.children;
+    for (var i = 0; i < dots.length; i++) {
+      dots[i].className = i < state.step ? "done" : (i === state.step ? "active" : "");
+    }
+  }
+
+  function goTo(n) {
+    state.step = n;
+    for (var i = 0; i < steps.length; i++) {
+      steps[i].classList.toggle("active", parseInt(steps[i].dataset.step, 10) === n);
+    }
+    backBtn.classList.toggle("show", n > 0 && n < TOTAL - 1);
+    renderDots();
+  }
+
+  backBtn.addEventListener("click", function () {
+    if (state.step > 0) goTo(state.step - 1);
+  });
+
+  // Step 0
+  var teaseBtn = document.getElementById("teaseBtn");
+  var teaserText = document.getElementById("teaserText");
+  teaseBtn.addEventListener("click", function () {
+    teaserText.textContent = TEASE_LINES[Math.floor(Math.random() * TEASE_LINES.length)];
+    teaserText.classList.remove("shake");
+    void teaserText.offsetWidth;
+    teaserText.classList.add("shake");
+  });
+  document.getElementById("acceptBtn").addEventListener("click", function () {
+    goTo(1);
+  });
+
+  // Step 1
+  var dateInput = document.getElementById("dateInput");
+  var today = new Date();
+  dateInput.min = today.toISOString().slice(0, 10);
+  var timeChipsEl = document.getElementById("timeChips");
+  var next1 = document.getElementById("next1");
+
+  TIME_OPTIONS.forEach(function (t) {
+    var c = document.createElement("button");
+    c.type = "button";
+    c.className = "chip chip-time";
+    c.textContent = t;
+    c.setAttribute("aria-pressed", "false");
+    c.addEventListener("click", function () {
+      var chips = timeChipsEl.querySelectorAll(".chip");
+      chips.forEach(function (ch) { ch.setAttribute("aria-pressed", "false"); });
+      c.setAttribute("aria-pressed", "true");
+      state.time = t;
+      checkStep1();
+    });
+    timeChipsEl.appendChild(c);
+  });
+
+  function checkStep1() {
+    state.date = dateInput.value;
+    next1.disabled = !(state.date && state.time);
+    saveState();
+  }
+  dateInput.addEventListener("change", checkStep1);
+  next1.addEventListener("click", function () { goTo(2); });
+
+  // Step 2
+  var availChipsEl = document.getElementById("availChips");
+  var next2 = document.getElementById("next2");
+  AVAIL_OPTIONS.forEach(function (a) {
+    var c = document.createElement("button");
+    c.type = "button";
+    c.className = "chip";
+    c.textContent = a;
+    c.setAttribute("aria-pressed", "false");
+    c.addEventListener("click", function () {
+      var pressed = c.getAttribute("aria-pressed") === "true";
+      c.setAttribute("aria-pressed", String(!pressed));
+      if (pressed) state.avail.delete(a); else state.avail.add(a);
+      next2.disabled = state.avail.size === 0;
+      saveState();
+    });
+    availChipsEl.appendChild(c);
+  });
+  next2.addEventListener("click", function () { goTo(3); });
+
+  // Step 3
+  var regionChipsEl = document.getElementById("regionChips");
+  var next3 = document.getElementById("next3");
+  REGIONS.forEach(function (r) {
+    var c = document.createElement("button");
+    c.type = "button";
+    c.className = "chip region-card";
+    c.setAttribute("aria-pressed", "false");
+    c.innerHTML = '<span class="r-name">' + r.name + '</span><span class="r-vibe">' + r.vibe + '</span>';
+    c.addEventListener("click", function () {
+      var pressed = c.getAttribute("aria-pressed") === "true";
+      c.setAttribute("aria-pressed", String(!pressed));
+      if (pressed) state.regions.delete(r.name); else state.regions.add(r.name);
+      next3.disabled = state.regions.size === 0;
+      saveState();
+    });
+    regionChipsEl.appendChild(c);
+  });
+  next3.addEventListener("click", function () { goTo(4); });
+
+  // Step 4
+  var actChipsEl = document.getElementById("actChips");
+  var next4 = document.getElementById("next4");
+  ACTS.forEach(function (a) {
+    var c = document.createElement("button");
+    c.type = "button";
+    c.className = "chip act-card";
+    c.setAttribute("aria-pressed", "false");
+    c.innerHTML = '<span class="act-emoji">' + a.e + '</span>' + a.n;
+    c.addEventListener("click", function () {
+      var pressed = c.getAttribute("aria-pressed") === "true";
+      c.setAttribute("aria-pressed", String(!pressed));
+      if (pressed) state.acts.delete(a.n); else state.acts.add(a.n);
+      next4.disabled = state.acts.size === 0;
+      saveState();
+    });
+    actChipsEl.appendChild(c);
+  });
+  next4.addEventListener("click", function () {
+    renderRecap();
+    spawnHearts();
+    goTo(5);
+  });
+
+  // Step 5
+  function formatDate(iso) {
+    if (!iso) return "";
+    var parts = iso.split("-");
+    return parts[1] + "月" + parts[2] + "日";
+  }
+
+  function renderRecap() {
+    var box = document.getElementById("recapBox");
+    box.innerHTML = "";
+    var rows = [
+      { icon: "📅", label: "见面时间", value: formatDate(state.date) + " · " + state.time },
+      { icon: "🕰", label: "大概时段", value: [...state.avail].join(" / ") },
+      { icon: "📍", label: "想去区域", value: [...state.regions].join(" / ") },
+      { icon: "✨", label: "想做的事", value: [...state.acts].join(" / ") }
+    ];
+    rows.forEach(function (r) {
+      var row = document.createElement("div");
+      row.className = "recap-row";
+      row.innerHTML = '<span class="recap-icon">' + r.icon + '</span>' +
+        '<span><span class="recap-label">' + r.label + '</span><br>' +
+        '<span class="recap-value">' + r.value + '</span></span>';
+      box.appendChild(row);
+    });
+  }
+
+  function buildCopyText() {
+    return "关于约会，我的答案 💌\n" +
+      "📅 " + formatDate(state.date) + " · " + state.time + "\n" +
+      "🕰 " + [...state.avail].join("、") + "\n" +
+      "📍 " + [...state.regions].join("、") + "\n" +
+      "✨ " + [...state.acts].join("、") + "\n" +
+      "剩下的，你安排就好 (｡･ω･｡)ﾉ";
+  }
+
+  var copyFeedback = document.getElementById("copyFeedback");
+  var copyBtn = document.getElementById("copyBtn");
+  var shareHint = document.getElementById("shareHint");
+  var canShare = !!(navigator.share);
+  if (canShare) {
+    copyBtn.textContent = "分享给TA";
+    shareHint.textContent = "点上面按钮直接唤起微信 / 短信分享，一步发送";
+  } else {
+    copyBtn.textContent = "复制文案";
+    shareHint.textContent = "长按 / 截图这张卡片，效果一样浪漫 (｡•ᴗ•｡)";
+  }
+
+  function showFeedback(msg) {
+    copyFeedback.textContent = msg;
+    copyFeedback.classList.add("show");
+    setTimeout(function () { copyFeedback.classList.remove("show"); }, 1800);
+  }
+
+  function fallbackCopy(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showFeedback("已复制到剪贴板 ✓");
+      }).catch(function () {
+        showFeedback("复制失败，长按卡片截图发送吧");
+      });
+    } else {
+      showFeedback("复制失败，长按卡片截图发送吧");
+    }
+  }
+
+  copyBtn.addEventListener("click", function () {
+    var text = buildCopyText();
+    if (canShare) {
+      navigator.share({ title: "关于约会，我的答案", text: text }).catch(function (err) {
+        // AbortError = she cancelled the share sheet herself, nothing to do
+        if (err && err.name !== "AbortError") fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    state.date = ""; state.time = "";
+    state.avail.clear(); state.regions.clear(); state.acts.clear();
+    dateInput.value = "";
+    [timeChipsEl, availChipsEl, regionChipsEl, actChipsEl].forEach(function (wrap) {
+      wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+    });
+    next1.disabled = true; next2.disabled = true; next3.disabled = true; next4.disabled = true;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    goTo(0);
+  });
+
+  function spawnHearts() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var fx = document.getElementById("heartsFx");
+    var glyphs = ["💗", "💌", "✨", "💕"];
+    for (var i = 0; i < 8; i++) {
+      (function (i) {
+        setTimeout(function () {
+          var s = document.createElement("span");
+          s.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+          s.style.left = (10 + Math.random() * 80) + "%";
+          s.style.animationDuration = (2.2 + Math.random() * 1.2) + "s";
+          fx.appendChild(s);
+          setTimeout(function () { s.remove(); }, 3600);
+        }, i * 140);
+      })(i);
+    }
+  }
+
+  loadState();
+  if (state.date) dateInput.value = state.date;
+  goTo(0);
+})();
+</script>
