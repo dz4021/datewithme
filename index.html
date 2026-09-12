@@ -1,88 +1,72 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#c8edf7" />
-<meta name="description" content="小8和乌萨奇送来的一份约会邀请" />
-<title>DateWithMe · 小8 × 乌萨奇</title>
+<title>DateWithMe</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 
   :root {
-    color-scheme: light;
-    --paper: #dff5fb;
-    --surface: #fffaf0;
-    --surface-strong: #ffffff;
-    --ink: #4b312d;
-    --ink-soft: #684c46;
-    --muted: #987e77;
-    --line: #4b312d;
-    --sky: #b9e6f3;
-    --sky-strong: #78b9d3;
-    --cream: #fff0c2;
-    --cream-strong: #f5da91;
-    --yellow: #ffd96d;
-    --pink: #f7acbb;
-    --pink-strong: #ed7f99;
-    --peach: #f4a286;
-    --grass: #bddd9f;
-    --cat: #fffdf8;
-    --cat-blue: #85abc7;
-    --accent: #83c5dd;
-    --accent-strong: #4d9ebe;
-    --accent-soft: #ccecf5;
-    --accent-wash: #eef9fc;
-    --chip-bg: #fffefa;
-    --shadow-1: 0 24px 48px -20px rgba(75, 49, 45, .28), 0 8px 0 rgba(120, 185, 211, .16);
-    --shadow-2: 0 3px 0 #4b312d;
-    --focus: #ed7f99;
+    --paper: #fffcf7;
+    --surface: #ffffff;
+    --ink: #241a1d;
+    --ink-soft: #4a3a3e;
+    --muted: #9c8890;
+    --line: #241a1d;
+    --accent: #ff2e76;
+    --accent-strong: #e0195f;
+    --accent-soft: #ffd6e3;
+    --accent-wash: #fff0f4;
+    --chip-bg: #ffffff;
+    --shadow-1: 0 22px 46px -18px rgba(224, 25, 95, 0.28);
+    --shadow-2: 0 2px 0 rgba(36, 26, 29, 0.9);
+    --focus: #ff2e76;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1315;
+      --surface: #241a1d;
+      --ink: #f7ebee;
+      --ink-soft: #d9c3c9;
+      --muted: #a58891;
+      --line: #f7ebee;
+      --accent: #ff5c93;
+      --accent-strong: #ff85ac;
+      --accent-soft: #4a2530;
+      --accent-wash: #2c1a20;
+      --chip-bg: #2c2023;
+      --shadow-1: 0 22px 46px -18px rgba(255, 92, 147, 0.35);
+      --shadow-2: 0 2px 0 rgba(0, 0, 0, 0.6);
+      --focus: #ff85ac;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b1315;
+    --surface: #241a1d;
+    --ink: #f7ebee;
+    --ink-soft: #d9c3c9;
+    --muted: #a58891;
+    --line: #f7ebee;
+    --accent: #ff5c93;
+    --accent-strong: #ff85ac;
+    --accent-soft: #4a2530;
+    --accent-wash: #2c1a20;
+    --chip-bg: #2c2023;
+    --shadow-1: 0 22px 46px -18px rgba(255, 92, 147, 0.35);
+    --shadow-2: 0 2px 0 rgba(0, 0, 0, 0.6);
+    --focus: #ff85ac;
   }
 
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    background:
-      radial-gradient(ellipse 90px 34px at 12% 12%, rgba(255,255,255,.9) 0 64%, transparent 66%),
-      radial-gradient(ellipse 120px 42px at 88% 22%, rgba(255,255,255,.7) 0 64%, transparent 66%),
-      radial-gradient(circle at center, rgba(77,158,190,.12) 0 2px, transparent 2.5px) 0 0 / 42px 42px,
-      linear-gradient(180deg, #c8edf7 0%, var(--paper) 68%, #dff2d2 100%);
+    background: var(--paper);
     color: var(--ink);
     font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 18px 16px 28px;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  body::before,
-  body::after {
-    content: "";
-    position: fixed;
-    z-index: -1;
-    pointer-events: none;
-  }
-  body::before {
-    width: 155px;
-    height: 82px;
-    left: -42px;
-    bottom: -24px;
-    background: var(--grass);
-    border-radius: 70% 70% 0 0;
-    transform: rotate(8deg);
-  }
-  body::after {
-    width: 190px;
-    height: 95px;
-    right: -58px;
-    bottom: -35px;
-    background: #c7e8b6;
-    border-radius: 65% 65% 0 0;
-    transform: rotate(-7deg);
+    padding: 32px 16px 40px;
   }
 
   h1, h2, .display {
@@ -93,65 +77,21 @@
 
   .stage {
     width: 100%;
-    max-width: 448px;
+    max-width: 440px;
     position: relative;
-  }
-
-  .stage::before,
-  .stage::after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    width: 72px;
-    height: 30px;
-    border: 2px solid rgba(75,49,45,.22);
-    border-radius: 8px;
-    opacity: .7;
-  }
-  .stage::before {
-    left: -20px;
-    top: 54px;
-    background: rgba(255,217,109,.72);
-    transform: rotate(-14deg);
-  }
-  .stage::after {
-    right: -22px;
-    bottom: 52px;
-    background: rgba(247,172,187,.68);
-    transform: rotate(12deg);
   }
 
   .card {
-    background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,250,240,.98));
+    background: var(--surface);
     border: 3px solid var(--line);
-    border-radius: 34px;
+    border-radius: 32px;
     box-shadow: var(--shadow-1);
-    padding: 20px 22px 22px;
+    padding: 26px 22px 22px;
     position: relative;
     overflow: hidden;
-    min-height: min(650px, calc(100dvh - 46px));
+    min-height: 560px;
     display: flex;
     flex-direction: column;
-    transition: box-shadow .3s ease;
-  }
-  .card::before {
-    content: "";
-    position: absolute;
-    z-index: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 9px;
-    border-bottom: 2px solid var(--line);
-    background: linear-gradient(90deg, var(--sky-strong) 0 50%, var(--yellow) 50% 100%);
-    transition: background .3s ease;
-  }
-  .card[data-current-step="1"]::before { background: linear-gradient(90deg, var(--cream-strong), var(--yellow)); }
-  .card[data-current-step="2"]::before { background: linear-gradient(90deg, var(--cat-blue), var(--sky)); }
-  .card[data-current-step="3"]::before { background: linear-gradient(90deg, var(--pink), var(--peach)); }
-  .card > :not(.deco-hearts):not(.hearts-fx) {
-    position: relative;
-    z-index: 1;
   }
 
   .deco-hearts {
@@ -162,18 +102,18 @@
   }
   .deco-hearts span {
     position: absolute;
-    color: var(--pink);
+    color: var(--accent-soft);
     line-height: 1;
   }
-  .deco-hearts span:nth-child(1) { top: 64px; right: 16px; font-size: 16px; opacity: .6; transform: rotate(10deg); }
-  .deco-hearts span:nth-child(2) { bottom: 94px; left: 11px; font-size: 13px; opacity: .45; transform: rotate(-12deg); }
-  .deco-hearts span:nth-child(3) { top: 47%; right: -3px; font-size: 15px; opacity: .4; transform: rotate(6deg); }
+  .deco-hearts span:nth-child(1) { top: 16px; right: 20px; font-size: 22px; opacity: .7; transform: rotate(10deg); }
+  .deco-hearts span:nth-child(2) { bottom: 90px; left: 10px; font-size: 15px; opacity: .5; transform: rotate(-12deg); }
+  .deco-hearts span:nth-child(3) { top: 44%; right: -4px; font-size: 17px; opacity: .4; transform: rotate(6deg); }
 
   .topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
     min-height: 32px;
   }
 
@@ -199,25 +139,17 @@
     margin: 0 auto;
   }
   .dots span {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: var(--dot-pale);
-    border: 1px solid var(--dot-color);
-    opacity: .58;
-    transition: background .25s, transform .25s, border-radius .25s;
+    background: var(--accent-soft);
+    transition: background .25s, transform .25s;
   }
-  .dots span:nth-child(1) { --dot-color: var(--pink-strong); --dot-pale: #fbd9e1; }
-  .dots span:nth-child(2) { --dot-color: var(--yellow); --dot-pale: #fff0bd; }
-  .dots span:nth-child(3) { --dot-color: var(--sky-strong); --dot-pale: #d8f0f7; }
-  .dots span:nth-child(4) { --dot-color: #8fc779; --dot-pale: #dff1d6; }
   .dots span.active {
-    background: var(--dot-color);
-    border-radius: 3px;
-    transform: scale(1.35) rotate(45deg);
-    opacity: 1;
+    background: var(--accent);
+    transform: scale(1.3);
   }
-  .dots span.done { background: var(--dot-color); opacity: .86; }
+  .dots span.done { background: var(--accent-strong); }
 
   .spacer32 { width: 32px; }
 
@@ -229,16 +161,10 @@
     font-family: 'ZCOOL KuaiLe', 'PingFang SC', sans-serif;
     font-size: 15px;
     letter-spacing: .02em;
-    color: var(--ink-soft);
-    margin: 0 auto 8px;
-    width: fit-content;
-    padding: 5px 11px;
-    border: 2px solid var(--line);
-    border-radius: 999px;
-    background: linear-gradient(105deg, var(--accent-soft) 0 46%, var(--cream) 54% 100%);
-    box-shadow: 0 3px 0 rgba(75,49,45,.18), 0 6px 14px rgba(75,49,45,.08);
+    color: var(--accent-strong);
+    margin-bottom: 14px;
   }
-  .brand .heart { font-size: 12px; color: var(--pink-strong); }
+  .brand .heart { font-size: 12px; }
 
   .step {
     display: none;
@@ -269,86 +195,39 @@
     font-size: clamp(22px, 6vw, 27px);
     margin: 0 0 8px;
     line-height: 1.3;
-    color: var(--ink);
   }
 
   .subtitle {
     font-size: 14px;
     color: var(--muted);
-    margin: 0 0 18px;
+    margin: 0 0 20px;
     line-height: 1.6;
   }
 
   .mascot-wrap {
-    background: var(--sky);
+    background: var(--accent-soft);
     border: 3px solid var(--line);
-    border-radius: 28px;
-    width: min(100%, 236px);
-    height: 236px;
-    margin: 2px auto 20px;
+    border-radius: 26px;
+    width: 168px;
+    height: 168px;
+    margin: 4px auto 22px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    position: relative;
-    box-shadow:
-      0 0 0 5px var(--surface-strong),
-      0 0 0 7px rgba(120,185,211,.58),
-      0 8px 0 rgba(75,49,45,.14);
+  }
+  .mascot {
+    width: 118px;
+    height: 118px;
     animation: bob 3.2s ease-in-out infinite;
-    transform-origin: center;
-  }
-  .mascot-gallery {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: 1;
-  }
-  .main-photo {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
   }
   @keyframes bob {
-    0%, 100% { transform: translateY(0) rotate(-1deg); }
-    50% { transform: translateY(-6px) rotate(1deg); }
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50% { transform: translateY(-7px) rotate(1.5deg); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .mascot-wrap { animation: none; }
+    .mascot { animation: none; }
   }
-
-  .step-heading {
-    display: grid;
-    grid-template-columns: 1fr 58px;
-    gap: 12px;
-    align-items: start;
-  }
-  .step-pal {
-    width: 58px;
-    height: 58px;
-    padding: 3px;
-    border: 2px solid var(--line);
-    border-radius: 18px;
-    background: var(--accent-soft);
-    transform: rotate(3deg);
-    object-fit: cover;
-    object-position: center;
-    box-shadow: 0 0 0 3px white, 0 3px 0 rgba(75,49,45,.16);
-  }
-  .step-pal.rabbit { background: var(--cream); transform: rotate(-3deg); object-fit: contain; padding: 1px; }
-  .step-pal.cat { background: var(--sky); object-position: 50% 45%; }
-  .step-pal.pair {
-    width: 76px;
-    height: 58px;
-    padding: 2px;
-    display: flex;
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--accent-soft), var(--cream));
-  }
-  .step-pal.pair img { width: 50%; height: 100%; min-width: 0; }
-  .step-pal.pair .pair-cat-photo { object-fit: cover; object-position: center; border-radius: 13px 0 0 13px; }
-  .step-pal.pair .pair-rabbit-photo { object-fit: contain; border-radius: 0 13px 13px 0; }
 
   .center-block { text-align: center; }
 
@@ -371,26 +250,17 @@
     border: 2.5px solid var(--line);
     transition: transform .12s ease, box-shadow .12s ease, background .2s;
     -webkit-tap-highlight-color: transparent;
-    position: relative;
-    overflow: hidden;
   }
   button.btn:active { transform: translateY(2px); }
   button.btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
   .btn-primary {
-    background: linear-gradient(180deg, #ffc0cd 0%, var(--pink) 100%);
+    background: var(--accent);
     color: var(--ink);
     box-shadow: var(--shadow-2);
     flex: 1;
   }
-  .btn-primary::before {
-    content: "✦";
-    display: inline-block;
-    margin-right: 7px;
-    color: #fff8dc;
-    text-shadow: 0 1px 0 rgba(75,49,45,.25);
-  }
-  .btn-primary:hover { background: linear-gradient(180deg, #f9adbd, var(--pink-strong)); }
+  .btn-primary:hover { background: var(--accent-strong); }
   .btn-primary:disabled {
     opacity: .45;
     cursor: not-allowed;
@@ -398,7 +268,7 @@
   }
 
   .btn-ghost {
-    background: linear-gradient(180deg, var(--surface-strong), #f5fbfd);
+    background: transparent;
     color: var(--ink-soft);
     border-color: var(--muted);
     flex: 1;
@@ -439,7 +309,7 @@
     color: var(--ink);
     background: var(--chip-bg);
     border: 2.5px solid var(--line);
-    border-radius: 18px;
+    border-radius: 16px;
     padding: 13px 14px;
   }
   input[type="date"]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
@@ -456,7 +326,7 @@
     background: var(--chip-bg);
     border: 2px solid var(--line);
     color: var(--ink);
-    border-radius: 16px;
+    border-radius: 14px;
     padding: 10px 13px;
     font-size: 13.5px;
     font-weight: 500;
@@ -464,17 +334,15 @@
     text-align: center;
     transition: background .15s, border-color .15s, transform .1s;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 2px 0 rgba(75,49,45,.1);
   }
   .chip:active { transform: scale(.97); }
   .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .chip[aria-pressed="true"] {
-    background: var(--cream);
-    border-color: var(--line);
+    background: var(--accent-soft);
+    border-color: var(--accent);
     font-weight: 700;
-    box-shadow: inset 0 -3px 0 var(--cream-strong);
   }
-  .chip[aria-pressed="true"]:not(.route-card)::before { content: "♡ "; color: var(--pink-strong); }
+  .chip[aria-pressed="true"]:not(.route-card)::before { content: "♥ "; }
 
   .chip-time { flex: 1 1 30%; }
 
@@ -487,15 +355,13 @@
     gap: 4px;
     padding: 22px 12px;
   }
-  .route-card:nth-child(1) { background: linear-gradient(145deg, var(--accent-wash), #fff); }
-  .route-card:nth-child(2) { background: linear-gradient(145deg, #fff9e4, #fff); }
   .route-card::after {
-    content: "♡";
+    content: "♥";
     position: absolute;
     top: 6px;
     right: 8px;
     font-size: 11px;
-    color: var(--pink-strong);
+    color: var(--accent);
     opacity: 0;
     transform: scale(.5);
     transition: opacity .15s, transform .15s;
@@ -507,37 +373,23 @@
   .route-emoji { font-size: 26px; }
   .route-card .r-name { font-size: 15px; font-weight: 700; }
   .route-card .r-vibe { font-size: 11.5px; color: var(--muted); font-weight: 400; line-height: 1.4; }
-  .route-card[aria-pressed="true"] .r-vibe { color: var(--ink-soft); }
+  .route-card[aria-pressed="true"] .r-vibe { color: var(--accent-strong); }
 
   .recap {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    background: linear-gradient(145deg, var(--accent-wash), #fff8df);
-    border: 2.5px dashed var(--sky-strong);
+    background: var(--accent-wash);
+    border: 2.5px dashed var(--accent);
     border-radius: 20px;
     padding: 16px 16px 14px;
     margin-bottom: 16px;
     font-variant-numeric: tabular-nums;
-    position: relative;
-    box-shadow: 0 4px 0 rgba(120,185,211,.16);
-  }
-  .recap::before {
-    content: "";
-    position: absolute;
-    width: 72px;
-    height: 17px;
-    left: 50%;
-    top: -10px;
-    transform: translateX(-50%) rotate(-2deg);
-    background: rgba(247,172,187,.58);
-    border-left: 1px dashed rgba(75,49,45,.2);
-    border-right: 1px dashed rgba(75,49,45,.2);
   }
   .recap-heading {
     font-family: 'ZCOOL KuaiLe', 'PingFang SC', sans-serif;
     font-size: 15px;
-    color: var(--ink-soft);
+    color: var(--accent-strong);
     text-align: center;
     margin-bottom: 2px;
   }
@@ -548,7 +400,7 @@
 
   .copy-feedback {
     font-size: 12.5px;
-    color: var(--pink-strong);
+    color: var(--accent-strong);
     text-align: center;
     font-weight: 700;
     height: 16px;
@@ -587,23 +439,13 @@
     color: var(--muted);
     margin-top: 14px;
   }
-
-  @media (max-width: 380px) {
-    body { padding: 10px 10px 18px; }
-    .card { padding: 16px 17px 18px; border-radius: 28px; }
-    .mascot-wrap { width: 214px; height: 214px; }
-    .btn-row.inline { flex-direction: column; }
-    .stage::before, .stage::after { display: none; }
-  }
 </style>
-</head>
-<body>
 
 <div class="stage">
   <div class="card" id="card">
     <div class="hearts-fx" id="heartsFx" aria-hidden="true"></div>
-    <div class="deco-hearts" aria-hidden="true"><span>♡</span><span>☁</span><span>♡</span></div>
-    <div class="brand"><span class="heart">♡</span>DateWithMe · 小8 × 乌萨奇</div>
+    <div class="deco-hearts" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span></div>
+    <div class="brand"><span class="heart">💌</span>DateWithMe</div>
     <div class="topbar">
       <button class="back-btn" id="backBtn" aria-label="上一步" type="button">←</button>
       <div class="dots" id="dots"></div>
@@ -614,13 +456,21 @@
     <section class="step active" data-step="0">
       <div class="center-block">
         <div class="mascot-wrap">
-          <div class="mascot-gallery" role="img" aria-label="乌萨奇照镜子，镜子里是小8">
-            <img class="main-photo" src="assets/mirror-main-original.png" alt="" />
-          </div>
+          <svg class="mascot" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="70" cy="82" rx="52" ry="44" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5"/>
+            <ellipse cx="27" cy="88" rx="14" ry="20" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5" transform="rotate(-18 27 88)"/>
+            <ellipse cx="113" cy="88" rx="14" ry="20" fill="var(--paper)" stroke="var(--line)" stroke-width="4.5" transform="rotate(18 113 88)"/>
+            <circle cx="53" cy="72" r="4.2" fill="var(--line)"/>
+            <circle cx="87" cy="72" r="4.2" fill="var(--line)"/>
+            <ellipse cx="46" cy="86" rx="8" ry="5" fill="var(--accent-soft)"/>
+            <ellipse cx="94" cy="86" rx="8" ry="5" fill="var(--accent-soft)"/>
+            <path d="M62 90 Q70 96 78 90" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            <path d="M70 58C64 48 48 50 48 64C48 76 70 92 70 92C70 92 92 76 92 64C92 50 76 48 70 58Z" fill="var(--accent)" stroke="var(--line)" stroke-width="4"/>
+          </svg>
         </div>
-        <p class="eyebrow">一份软乎乎的邀请</p>
+        <p class="eyebrow">来自TA的暗号</p>
         <h2 class="title">可以约你出来玩吗？</h2>
-        <p class="subtitle">小8和乌萨奇假装路过，其实已经等你的回答很久啦</p>
+        <p class="subtitle">装作云淡风轻发出去，其实已经等你回复很久了</p>
       </div>
       <div class="btn-row">
         <button class="btn btn-primary" id="acceptBtn" type="button">愿意呀 ♥</button>
@@ -631,14 +481,9 @@
 
     <!-- Step 1: date + time -->
     <section class="step" data-step="1">
-      <div class="step-heading">
-        <div>
-          <p class="eyebrow">第一步 · 乌萨奇值班</p>
-          <h2 class="title">什么时候能见到你？</h2>
-          <p class="subtitle">挑一个你方便的日子，具体时间也大致定一下</p>
-        </div>
-        <img class="step-pal rabbit" src="assets/rabbit-original-cutout.png" alt="" aria-hidden="true" />
-      </div>
+      <p class="eyebrow">第一步</p>
+      <h2 class="title">什么时候能见到你？</h2>
+      <p class="subtitle">挑一个你方便的日子，具体时间也大致定一下</p>
 
       <div class="field-block">
         <fieldset>
@@ -659,35 +504,33 @@
       </div>
     </section>
 
-    <!-- Step 2: mystery route -->
+    <!-- Step 2: region -->
     <section class="step" data-step="2">
-      <div class="step-heading">
-        <div>
-          <p class="eyebrow">第二步 · 小8带路</p>
-          <h2 class="title">选一条约会路径</h2>
-          <p class="subtitle">具体去哪先保密，选完当天见分晓</p>
-        </div>
-        <img class="step-pal cat" src="assets/cat-original.png" alt="" aria-hidden="true" />
+      <p class="eyebrow">第二步</p>
+      <h2 class="title">想约在哪个区？</h2>
+      <p class="subtitle">大概定个范围，具体地点到时候再商量</p>
+      <div class="chip-wrap pair" id="regionChips" role="group" aria-label="约会区域"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="next2" type="button" disabled>继续 →</button>
       </div>
+    </section>
+
+    <!-- Step 3: mystery route -->
+    <section class="step" data-step="3">
+      <p class="eyebrow">第三步 · 神秘惊喜</p>
+      <h2 class="title">选一条约会路径</h2>
+      <p class="subtitle">具体去哪先保密，选完当天见分晓</p>
       <div class="chip-wrap pair" id="routeChips" role="group" aria-label="约会路径"></div>
       <div class="btn-row">
         <button class="btn btn-primary" id="next3" type="button" disabled>生成答案 →</button>
       </div>
     </section>
 
-    <!-- Step 3: reveal -->
-    <section class="step" data-step="3">
-      <div class="step-heading">
-        <div>
-          <p class="eyebrow">小8 × 乌萨奇 · 匹配成功</p>
-          <h2 class="title">答案都给TA了</h2>
-          <p class="subtitle">把这张卡片分享回去，接下来就等见面啦</p>
-        </div>
-        <div class="step-pal pair" aria-hidden="true">
-          <img class="pair-cat-photo" src="assets/cat-original.png" alt="" />
-          <img class="pair-rabbit-photo" src="assets/rabbit-original-cutout.png" alt="" />
-        </div>
-      </div>
+    <!-- Step 4: reveal -->
+    <section class="step" data-step="4">
+      <p class="eyebrow">暗号已生成</p>
+      <h2 class="title">答案都给TA了</h2>
+      <p class="subtitle">把这张卡片复制或截图发回去就好</p>
 
       <div class="recap" id="recapBox"></div>
 
@@ -725,13 +568,14 @@
   }
 
   var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00"];
+  var REGIONS = ["黄浦", "静安", "徐汇", "长宁"];
   var ROUTES = [
-    { e: "🐾", name: "约会路径 1", vibe: "小8带路，惊喜不解释" },
-    { e: "🌙", name: "约会路径 2", vibe: "乌萨奇抽签，玄学但用心" }
+    { e: "🎲", name: "约会路径 1", vibe: "开盲盒，惊喜不解释" },
+    { e: "🔮", name: "约会路径 2", vibe: "抽个签，玄学但用心" }
   ];
   var TEASE_LINES = [
-    "才怪，小8都看出来啦 (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
-    "乌萨奇的耳朵都等得竖起来了",
+    "才怪，明明超期待 (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
+    "骗不了我的，快选愿意啦",
     "嘴上说不要，手指已经点过来了",
     "再装也没用哦，愿意吧～"
   ];
@@ -740,6 +584,7 @@
     step: 0,
     date: "",
     time: "",
+    region: "",
     route: ""
   };
 
@@ -747,7 +592,7 @@
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        date: state.date, time: state.time, route: state.route
+        date: state.date, time: state.time, region: state.region, route: state.route
       }));
     } catch (e) {}
   }
@@ -758,6 +603,7 @@
       var d = JSON.parse(raw);
       state.date = d.date || "";
       state.time = d.time || "";
+      state.region = d.region || "";
       state.route = d.route || "";
     } catch (e) {}
   }
@@ -765,7 +611,6 @@
   var steps = document.querySelectorAll(".step");
   var dotsEl = document.getElementById("dots");
   var backBtn = document.getElementById("backBtn");
-  var cardEl = document.getElementById("card");
   var TOTAL = steps.length;
 
   for (var i = 0; i < TOTAL; i++) {
@@ -782,7 +627,6 @@
 
   function goTo(n) {
     state.step = n;
-    cardEl.setAttribute("data-current-step", String(n));
     for (var i = 0; i < steps.length; i++) {
       steps[i].classList.toggle("active", parseInt(steps[i].dataset.step, 10) === n);
     }
@@ -838,7 +682,28 @@
   dateInput.addEventListener("change", checkStep1);
   next1.addEventListener("click", function () { goTo(2); });
 
-  // Step 2 — single-select mystery route
+  // Step 2 — single-select region
+  var regionChipsEl = document.getElementById("regionChips");
+  var next2 = document.getElementById("next2");
+  REGIONS.forEach(function (r) {
+    var c = document.createElement("button");
+    c.type = "button";
+    c.className = "chip";
+    c.textContent = r;
+    c.setAttribute("aria-pressed", "false");
+    c.addEventListener("click", function () {
+      var chips = regionChipsEl.querySelectorAll(".chip");
+      chips.forEach(function (ch) { ch.setAttribute("aria-pressed", "false"); });
+      c.setAttribute("aria-pressed", "true");
+      state.region = r;
+      next2.disabled = false;
+      saveState();
+    });
+    regionChipsEl.appendChild(c);
+  });
+  next2.addEventListener("click", function () { goTo(3); });
+
+  // Step 3 — single-select mystery route
   var routeChipsEl = document.getElementById("routeChips");
   var next3 = document.getElementById("next3");
   ROUTES.forEach(function (r) {
@@ -861,10 +726,10 @@
     renderRecap();
     spawnHearts();
     sendAnswerEmail(buildCopyText());
-    goTo(3);
+    goTo(4);
   });
 
-  // Step 3
+  // Step 4
   function formatDate(iso) {
     if (!iso) return "";
     var parts = iso.split("-");
@@ -876,11 +741,12 @@
     box.innerHTML = "";
     var heading = document.createElement("div");
     heading.className = "recap-heading";
-    heading.textContent = "🐱🐰 DateWithMe · 答案卡";
+    heading.textContent = "💌 DateWithMe · 答案卡";
     box.appendChild(heading);
     var rows = [
       { icon: "📅", label: "见面时间", value: formatDate(state.date) + " · " + state.time },
-      { icon: "🐾", label: "选的路径", value: state.route }
+      { icon: "📍", label: "想约的区", value: state.region },
+      { icon: "🗺", label: "选的路径", value: state.route }
     ];
     rows.forEach(function (r) {
       var row = document.createElement("div");
@@ -893,9 +759,10 @@
   }
 
   function buildCopyText() {
-    return "关于约会，我的答案 🐱🐰\n" +
+    return "关于约会，我的答案 💌\n" +
       "📅 " + formatDate(state.date) + " · " + state.time + "\n" +
-      "🐾 " + state.route + "\n" +
+      "📍 " + state.region + "\n" +
+      "🗺 " + state.route + "\n" +
       "剩下的，你安排就好 (｡･ω･｡)ﾉ";
   }
 
@@ -965,12 +832,12 @@
   });
 
   document.getElementById("resetBtn").addEventListener("click", function () {
-    state.date = ""; state.time = ""; state.route = "";
+    state.date = ""; state.time = ""; state.region = ""; state.route = "";
     dateInput.value = "";
-    [timeChipsEl, routeChipsEl].forEach(function (wrap) {
+    [timeChipsEl, regionChipsEl, routeChipsEl].forEach(function (wrap) {
       wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
     });
-    next1.disabled = true; next3.disabled = true;
+    next1.disabled = true; next2.disabled = true; next3.disabled = true;
     emailSent = false;
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     goTo(0);
@@ -979,7 +846,7 @@
   function spawnHearts() {
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     var fx = document.getElementById("heartsFx");
-    var glyphs = ["💗", "🐾", "✨", "🌸"];
+    var glyphs = ["💗", "💌", "✨", "💕"];
     for (var i = 0; i < 8; i++) {
       (function (i) {
         setTimeout(function () {
@@ -996,21 +863,6 @@
 
   loadState();
   if (state.date) dateInput.value = state.date;
-  if (state.time) {
-    timeChipsEl.querySelectorAll(".chip").forEach(function (chip) {
-      chip.setAttribute("aria-pressed", String(chip.textContent === state.time));
-    });
-  }
-  if (state.route) {
-    routeChipsEl.querySelectorAll(".chip").forEach(function (chip) {
-      var selected = chip.querySelector(".r-name").textContent === state.route;
-      chip.setAttribute("aria-pressed", String(selected));
-    });
-  }
-  next1.disabled = !(state.date && state.time);
-  next3.disabled = !state.route;
   goTo(0);
 })();
 </script>
-</body>
-</html>
