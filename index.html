@@ -109,13 +109,13 @@
     opacity: .7;
   }
   .stage::before {
-    left: -20px;
+    left: -10px;
     top: 54px;
     background: rgba(255,217,109,.72);
     transform: rotate(-14deg);
   }
   .stage::after {
-    right: -22px;
+    right: -10px;
     bottom: 52px;
     background: rgba(247,172,187,.68);
     transform: rotate(12deg);
@@ -147,8 +147,9 @@
     transition: background .3s ease;
   }
   .card[data-current-step="1"]::before { background: linear-gradient(90deg, var(--cream-strong), var(--yellow)); }
-  .card[data-current-step="2"]::before { background: linear-gradient(90deg, var(--cat-blue), var(--sky)); }
-  .card[data-current-step="3"]::before { background: linear-gradient(90deg, var(--pink), var(--peach)); }
+  .card[data-current-step="2"]::before { background: linear-gradient(90deg, var(--grass), var(--sky)); }
+  .card[data-current-step="3"]::before { background: linear-gradient(90deg, var(--cat-blue), var(--sky)); }
+  .card[data-current-step="4"]::before { background: linear-gradient(90deg, var(--pink), var(--peach)); }
   .card > :not(.deco-hearts):not(.hearts-fx) {
     position: relative;
     z-index: 1;
@@ -211,6 +212,7 @@
   .dots span:nth-child(2) { --dot-color: var(--yellow); --dot-pale: #fff0bd; }
   .dots span:nth-child(3) { --dot-color: var(--sky-strong); --dot-pale: #d8f0f7; }
   .dots span:nth-child(4) { --dot-color: #8fc779; --dot-pale: #dff1d6; }
+  .dots span:nth-child(5) { --dot-color: var(--peach); --dot-pale: #fbe1d6; }
   .dots span.active {
     background: var(--dot-color);
     border-radius: 3px;
@@ -474,9 +476,26 @@
     font-weight: 700;
     box-shadow: inset 0 -3px 0 var(--cream-strong);
   }
-  .chip[aria-pressed="true"]:not(.route-card)::before { content: "♡ "; color: var(--pink-strong); }
+  .chip[aria-pressed="true"]:not(.route-card):not(.district-card)::before { content: "♡ "; color: var(--pink-strong); }
 
   .chip-time { flex: 1 1 30%; }
+
+  .district-card {
+    min-height: 88px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .district-card:nth-child(1) { background: #f1faff; }
+  .district-card:nth-child(2) { background: #fff9e8; }
+  .district-card:nth-child(3) { background: #fff3f5; }
+  .district-card:nth-child(4) { background: #f4faed; }
+  .district-card .district-icon { font-size: 22px; line-height: 1; }
+  .district-card[aria-pressed="true"] { background: var(--cream); }
 
   .route-card {
     position: relative;
@@ -659,11 +678,27 @@
       </div>
     </section>
 
-    <!-- Step 2: mystery route -->
+    <!-- Step 2: district -->
     <section class="step" data-step="2">
       <div class="step-heading">
         <div>
-          <p class="eyebrow">第二步 · 小8带路</p>
+          <p class="eyebrow">第二步 · 先定碰头区域</p>
+          <h2 class="title">想在哪片区见面？</h2>
+          <p class="subtitle">选一个方便的地区，具体地点留一点惊喜</p>
+        </div>
+        <img class="step-pal cat" src="assets/cat-original.png" alt="" aria-hidden="true" />
+      </div>
+      <div class="chip-wrap pair" id="districtChips" role="group" aria-label="见面地区"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="nextDistrict" type="button" disabled>继续 →</button>
+      </div>
+    </section>
+
+    <!-- Step 3: mystery route -->
+    <section class="step" data-step="3">
+      <div class="step-heading">
+        <div>
+          <p class="eyebrow">第三步 · 小8带路</p>
           <h2 class="title">选一条约会路径</h2>
           <p class="subtitle">具体去哪先保密，选完当天见分晓</p>
         </div>
@@ -675,8 +710,8 @@
       </div>
     </section>
 
-    <!-- Step 3: reveal -->
-    <section class="step" data-step="3">
+    <!-- Step 4: reveal -->
+    <section class="step" data-step="4">
       <div class="step-heading">
         <div>
           <p class="eyebrow">小8 × 乌萨奇 · 匹配成功</p>
@@ -725,6 +760,7 @@
   }
 
   var TIME_OPTIONS = ["11:00", "12:30", "15:30", "18:00", "19:30", "21:00"];
+  var DISTRICTS = ["黄浦", "静安", "徐汇", "长宁"];
   var ROUTES = [
     { e: "🐾", name: "约会路径 1", vibe: "小8带路，惊喜不解释" },
     { e: "🌙", name: "约会路径 2", vibe: "乌萨奇抽签，玄学但用心" }
@@ -740,6 +776,7 @@
     step: 0,
     date: "",
     time: "",
+    district: "",
     route: ""
   };
 
@@ -747,7 +784,7 @@
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        date: state.date, time: state.time, route: state.route
+        date: state.date, time: state.time, district: state.district, route: state.route
       }));
     } catch (e) {}
   }
@@ -758,6 +795,7 @@
       var d = JSON.parse(raw);
       state.date = d.date || "";
       state.time = d.time || "";
+      state.district = DISTRICTS.indexOf(d.district) !== -1 ? d.district : "";
       state.route = d.route || "";
     } catch (e) {}
   }
@@ -838,7 +876,28 @@
   dateInput.addEventListener("change", checkStep1);
   next1.addEventListener("click", function () { goTo(2); });
 
-  // Step 2 — single-select mystery route
+  // Step 2 — single-select district
+  var districtChipsEl = document.getElementById("districtChips");
+  var nextDistrict = document.getElementById("nextDistrict");
+  DISTRICTS.forEach(function (district) {
+    var c = document.createElement("button");
+    c.type = "button";
+    c.className = "chip district-card";
+    c.dataset.district = district;
+    c.setAttribute("aria-pressed", "false");
+    c.innerHTML = '<span class="district-icon" aria-hidden="true">📍</span><span>' + district + '</span>';
+    c.addEventListener("click", function () {
+      districtChipsEl.querySelectorAll(".chip").forEach(function (ch) { ch.setAttribute("aria-pressed", "false"); });
+      c.setAttribute("aria-pressed", "true");
+      state.district = district;
+      nextDistrict.disabled = false;
+      saveState();
+    });
+    districtChipsEl.appendChild(c);
+  });
+  nextDistrict.addEventListener("click", function () { goTo(3); });
+
+  // Step 3 — single-select mystery route
   var routeChipsEl = document.getElementById("routeChips");
   var next3 = document.getElementById("next3");
   ROUTES.forEach(function (r) {
@@ -861,10 +920,10 @@
     renderRecap();
     spawnHearts();
     sendAnswerEmail(buildCopyText());
-    goTo(3);
+    goTo(4);
   });
 
-  // Step 3
+  // Step 4
   function formatDate(iso) {
     if (!iso) return "";
     var parts = iso.split("-");
@@ -880,6 +939,7 @@
     box.appendChild(heading);
     var rows = [
       { icon: "📅", label: "见面时间", value: formatDate(state.date) + " · " + state.time },
+      { icon: "📍", label: "见面地区", value: state.district + "区" },
       { icon: "🐾", label: "选的路径", value: state.route }
     ];
     rows.forEach(function (r) {
@@ -895,6 +955,7 @@
   function buildCopyText() {
     return "关于约会，我的答案 🐱🐰\n" +
       "📅 " + formatDate(state.date) + " · " + state.time + "\n" +
+      "📍 " + state.district + "区\n" +
       "🐾 " + state.route + "\n" +
       "剩下的，你安排就好 (｡･ω･｡)ﾉ";
   }
@@ -965,12 +1026,12 @@
   });
 
   document.getElementById("resetBtn").addEventListener("click", function () {
-    state.date = ""; state.time = ""; state.route = "";
+    state.date = ""; state.time = ""; state.district = ""; state.route = "";
     dateInput.value = "";
-    [timeChipsEl, routeChipsEl].forEach(function (wrap) {
+    [timeChipsEl, districtChipsEl, routeChipsEl].forEach(function (wrap) {
       wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
     });
-    next1.disabled = true; next3.disabled = true;
+    next1.disabled = true; nextDistrict.disabled = true; next3.disabled = true;
     emailSent = false;
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     goTo(0);
@@ -1001,6 +1062,11 @@
       chip.setAttribute("aria-pressed", String(chip.textContent === state.time));
     });
   }
+  if (state.district) {
+    districtChipsEl.querySelectorAll(".chip").forEach(function (chip) {
+      chip.setAttribute("aria-pressed", String(chip.dataset.district === state.district));
+    });
+  }
   if (state.route) {
     routeChipsEl.querySelectorAll(".chip").forEach(function (chip) {
       var selected = chip.querySelector(".r-name").textContent === state.route;
@@ -1008,6 +1074,7 @@
     });
   }
   next1.disabled = !(state.date && state.time);
+  nextDistrict.disabled = !state.district;
   next3.disabled = !state.route;
   goTo(0);
 })();
